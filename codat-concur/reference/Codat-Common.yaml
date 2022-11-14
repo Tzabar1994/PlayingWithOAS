@@ -20,6 +20,8 @@ tags:
     description: Endpoints to manage your Codat companies
   - name: Data Connections
     description: Endpoints to manage your companies' data connections
+  - name: Migrations
+    description: Endpoints that allow you to migrate existing connections into Codat.
 paths:
   /companies:
     get:
@@ -416,10 +418,129 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DataConnection'
+              examples:
+                example-1:
+                  value:
+                    id: ee2eb431-c0fa-4dc9-93fa-d29781c12bcd
+                    integrationId: bf083d72-62c7-493e-aec9-81b4dbba7e2c
+                    integrationKey: dfxm
+                    sourceId: bdd831ce-eebd-4896-89a7-20e5ee8989ee
+                    platformName: Basiq
+                    linkUrl: 'https://link-api.codat.io/companies/86bd88cb-44ab-4dfb-b32f-87b19b14287f/connections/ee2eb431-c0fa-4dc9-93fa-d29781c12bcd/start'
+                    status: Linked
+                    lastSync: '2022-10-27T10:22:43.6464237Z'
+                    created: '2022-10-27T09:53:29Z'
+                    sourceType: Banking
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/Not-Found'
       operationId: get-data-connection
       description: Get a single data connection for a company
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+            examples:
+              Example:
+                value: true
+    delete:
+      summary: Delete Connection
+      operationId: delete-dataConnection
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/Not-Found'
+      description: |-
+        Revoke and remove a data connection from a company.
+        This operation is not reversible - the end user would need to reauthorize a new data connection if you wish to view new data for this company.
+      tags:
+        - Data Connections
+    patch:
+      summary: Unlink data connection
+      operationId: patch-companies-companyId-connections-dataConnectionId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DataConnection'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/Not-Found'
+      description: 'This allows you to deauthorize a data connection, without deleting it from Codat. This means you can still view any data that has previously been pulled into Codat, and also lets you re-authorize in future if your customer wishes to resume sharing their data.'
+      tags:
+        - Data Connections
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+              x-examples:
+                example-1:
+                  status: unlinked
+            examples:
+              Example:
+                value:
+                  status: unlinked
+        description: ''
+  '/companies/{companyId}/data/all':
+    parameters:
+      - $ref: '#/components/parameters/companyId'
+    post:
+      summary: ''
+      operationId: create--many-pull-operations
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/Not-Found'
+      description: Initiate the pull of all data types that are enabled for this company
+      tags:
+        - Companies
+  '/companies/{companyId}/data/queue/{dataType}':
+    parameters:
+      - $ref: '#/components/parameters/companyId'
+      - $ref: '#/components/parameters/dataType'
+    post:
+      summary: Queue single pull operation
+      operationId: create-pull-operation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullOperation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/Not-Found'
+      tags:
+        - Companies
+      description: Queue a single pull operation for the given company and datatype
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          in: query
+          name: connectionId
+          description: 'Optionally, provide a data connection id to only queue pull operations on that connection.'
 components:
   schemas:
     Company:
@@ -577,6 +698,52 @@ components:
           sourceType: Banking
       title: Data Connection
       description: 'Represents the connection between a source of data, and a Codat company'
+    PullOperation:
+      type: object
+      properties:
+        id:
+          type: string
+        companyId:
+          type: string
+        connectionId:
+          type: string
+        dataType:
+          type: string
+        status:
+          type: string
+        requested:
+          type: string
+        progress:
+          type: integer
+        isCompleted:
+          type: boolean
+        isErrored:
+          type: boolean
+      x-examples:
+        example-1:
+          id: 97d60846-f07a-4d42-b5a0-0bdcc6ebf56b
+          companyId: 4645bd78-8988-45bc-ac9e-67ba5df6e4e5
+          connectionId: 51baa045-4836-4317-a42e-3542e991e581
+          dataType: invoices
+          status: Initial
+          requested: '2022-11-14T11:18:37.2798351Z'
+          progress: 10
+          isCompleted: false
+          isErrored: false
+      examples:
+        - id: 97d60846-f07a-4d42-b5a0-0bdcc6ebf56b
+          companyId: 4645bd78-8988-45bc-ac9e-67ba5df6e4e5
+          connectionId: 51baa045-4836-4317-a42e-3542e991e581
+          dataType: invoices
+          status: Initial
+          requested: '2022-11-14T11:18:37.2798351Z'
+          progress: 10
+          isCompleted: false
+          isErrored: false
+      title: Pull Operation
+      description: |-
+        Information about a queued, in progress or completed pull operation.
+        *Formally called `dataset`*
   securitySchemes:
     API_Key:
       name: Authorization
@@ -656,6 +823,52 @@ components:
                 correlationId: bc997528a9d7abb9161ef45f05d38599
                 canBeRetried: Unknown
                 detailedErrorCode: 0
+    Not-Found:
+      description: |-
+        One or more of the resources you referenced could not be found.
+        This might be because your company or data connection id is wrong, or was already deleted.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+              service:
+                type: string
+              error:
+                type: string
+              correlationId:
+                type: string
+              canBeRetried:
+                type: string
+              detailedErrorCode:
+                type: integer
+            x-examples:
+              example-1:
+                statusCode: 404
+                service: PublicApi
+                error: Data connection a22dd66b-564a-4832-9b37-7b3ce4aeb7de not found
+                correlationId: 8fa2b5f4794970a4ee73758f612e8df0
+                canBeRetried: Unknown
+                detailedErrorCode: 0
+          examples:
+            Data connection not found:
+              value:
+                statusCode: 404
+                service: PublicApi
+                error: Data connection a22dd66b-564a-4832-9b37-7b3ce4aeb7de not found
+                correlationId: 8fa2b5f4794970a4ee73758f612e8df0
+                canBeRetried: Unknown
+                detailedErrorCode: 0
+            Company not found:
+              value:
+                statusCode: 404
+                service: ClientsApi
+                error: No company was found with ID 846ed55c-974b-4392-a1f1-87b6fdbf3c5e
+                correlationId: 0a40c2f31fc8f992fb88b0853e4166f3
+                canBeRetried: Unknown
+                detailedErrorCode: 0
   parameters:
     companyId:
       name: companyId
@@ -664,7 +877,7 @@ components:
       schema:
         type: string
         format: uuid
-      description: GUID of your company
+      description: UUID of your SME
     dataConnectionId:
       name: dataConnectionId
       in: path
@@ -707,4 +920,22 @@ components:
       required: false
       schema:
         type: string
+    dataType:
+      name: dataType
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+          - invoices
+          - accounts
+          - commerce-payments
+          - banking-accounts
+          - company
+          - profitAndLoss
+          - commerce-transactions
+          - bills
+          - customers
+        example: customers
+      description: A key for a Codat data type
 x-extension-2: null
