@@ -10,7 +10,7 @@
  * [Swagger](./swagger.html)
  * [RapiDoc](./rapidoc.html)
  * [Stoplight](https://dans-just-testing.stoplight.io/docs/playingwithoas/466k6ayziv9at-codat) 
- * Readme - not yet uploaded.
+ * [Readme](https://codat-group.readme.io/codat-clone-trial/reference/list-companies)
 
 # Notes      
 ## Redoc
