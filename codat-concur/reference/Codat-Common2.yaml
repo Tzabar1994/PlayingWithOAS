@@ -2,7 +2,7 @@ openapi: 3.0.1
 x-stoplight:
   id: 466k6ayziv9at
 info:
-  title: Codat
+  title: Codat Legacy (For Swagger)
   version: '1.0'
   description: |-
     Common API to all of Codat's products.
