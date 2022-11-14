@@ -24,3 +24,5 @@
 ## RapiDoc
 
 ## Readme
+* Obviously embedded as part of Readme.
+* Synced from hosted OAS file, but only one that can be then edited within ... opportunties for confusion!
