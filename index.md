@@ -6,10 +6,10 @@
 * Try it out in some renderers, get a feel for what is important, what is nice and what is bad.
 
 # Renderers
- * [Redoc]("redoc.html")
- * [Swagger]("swagger.html)
- * [RapiDoc]("rapidoc.html")
- * [Stoplight]("https://dans-just-testing.stoplight.io/docs/playingwithoas/466k6ayziv9at-codat") 
+ * [Redoc](./redoc.html)
+ * [Swagger](./swagger.html)
+ * [RapiDoc](./rapidoc.html)
+ * [Stoplight](https://dans-just-testing.stoplight.io/docs/playingwithoas/466k6ayziv9at-codat) 
  * Readme - not yet uploaded.
 
 # Notes      
