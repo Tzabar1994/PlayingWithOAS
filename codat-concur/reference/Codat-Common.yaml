@@ -1,0 +1,710 @@
+openapi: 3.1.0
+x-stoplight:
+  id: 466k6ayziv9at
+info:
+  title: Codat
+  version: '1.0'
+  summary: Codat Common
+  description: |-
+    Common API to all of Codat's products.
+    Covers creating and managing your companies, data connections, integrations and probably more!
+  contact:
+    name: Codat
+    url: 'https://codat.io'
+    email: support@codat.io
+servers:
+  - url: 'https://api.codat.io'
+    description: Codat
+tags:
+  - name: Companies
+    description: Endpoints to manage your Codat companies
+  - name: Data Connections
+    description: Endpoints to manage your companies' data connections
+paths:
+  /companies:
+    get:
+      summary: List companies
+      tags:
+        - Companies
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  example-1:
+                    results:
+                      - id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        name: string
+                        platform: string
+                        redirect: string
+                        lastSync: '2022-11-10T10:34:06.478Z'
+                        dataConnections:
+                          - id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                            integrationId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                            integrationKey: string
+                            sourceId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                            platformName: string
+                            linkUrl: string
+                            status: string
+                            lastSync: '2022-11-10T10:34:06.478Z'
+                            created: '2022-11-10T10:34:06.478Z'
+                            sourceType: string
+                            dataConnectionErrors:
+                              - statusCode: string
+                                statusText: string
+                                errorMessage: string
+                                erroredOnUtc: '2022-11-10T10:34:06.478Z'
+                            connectionInfo:
+                              additionalProp1: string
+                              additionalProp2: string
+                              additionalProp3: string
+                        created: '2022-11-10T10:34:06.478Z'
+                        createdByUserName: string
+                    pageNumber: 0
+                    pageSize: 0
+                    totalResults: 0
+                    _links:
+                      self:
+                        href: string
+                      current:
+                        href: string
+                      next:
+                        href: string
+                      previous:
+                        href: string
+                properties:
+                  results:
+                    type: array
+                    items: {}
+                  pageNumber:
+                    type: integer
+                  pageSize:
+                    type: integer
+                  totalResults:
+                    type: integer
+                  '':
+                    type: string
+                  _links:
+                    type: object
+                    properties:
+                      self:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+                      current:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+                      next:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+                      previous:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+              examples:
+                List of Companies:
+                  value:
+                    results:
+                      - id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        name: My Test Company
+                        platform: ''
+                        redirect: 'https://link.codat.io/company/3fa85f64-5717-4562-b3fc-2c963f66afa6'
+                        lastSync: '2022-01-01T12:30:00.000Z'
+                        dataConnections:
+                          - id: 51baa045-4836-4317-a42e-3542e991e581
+                            integrationId: 1c312d69-e638-46d4-ad31-72e6c3ba8390
+                            integrationKey: vjms
+                            sourceId: 396c3158-5dd7-481b-a7c4-a795ca31792b
+                            platformName: Pandle
+                            linkUrl: 'https://link-api.codat.io/companies/3fa85f64-5717-4562-b3fc-2c963f66afa6/connections/51baa045-4836-4317-a42e-3542e991e581/start'
+                            status: Linked
+                            lastSync: '2022-01-01T12:30:00.000Z'
+                            created: '2022-01-01T11:30:00Z'
+                            sourceType: Accounting
+                        created: '2022-01-01T11:30:00Z'
+                        createdByUserName: Mike Smith
+                    pageNumber: 1
+                    pageSize: 1
+                    totalResults: 1
+                    _links:
+                      current:
+                        href: /companies?page=1&pageSize=100
+                      self:
+                        href: /companies
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          $ref: '#/components/responses/Malformed-Query'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      operationId: list-companies
+      description: List all companies that you have created in Codat
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/orderBy'
+    post:
+      summary: Create a company
+      tags:
+        - Companies
+      operationId: create-company
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  platform:
+                    type: string
+                  redirect:
+                    type: string
+                  dataConnections:
+                    type: array
+                    items:
+                      type: object
+                      properties: {}
+                  created:
+                    type: string
+                  createdByUserName:
+                    type: string
+                x-examples:
+                  example-1:
+                    id: ab12c58d-a678-4ebf-a159-ae99e1807bd0
+                    name: My First Company
+                    platform: ''
+                    redirect: 'https://link.codat.io/company/ab12c58d-a678-4ebf-a159-ae99e1807bd0'
+                    dataConnections: []
+                    created: '2022-11-10T10:45:18.1950523Z'
+                    createdByUserName: Dan Tzabar
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      description: Create a new company
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                example-1:
+                  name: string
+                  platformType: string
+              properties:
+                name:
+                  type: string
+                platformType:
+                  type: string
+                  example: gbol
+                  pattern: '[a-z][a-z][a-z][a-z]'
+                  maxLength: 4
+                  minLength: 4
+              required:
+                - name
+            examples:
+              Example with platform key:
+                value:
+                  name: My first company
+                  platformType: gbol
+              Example without platform key:
+                value:
+                  name: My second company
+  '/companies/{companyId}':
+    parameters:
+      - $ref: '#/components/parameters/companyId'
+    get:
+      summary: Get a single company
+      tags:
+        - Companies
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Company'
+              examples:
+                example-1:
+                  value:
+                    id: ab12c58d-a678-4ebf-a159-ae99e1807bd0
+                    name: My First Company
+                    platform: ''
+                    redirect: 'https://link.codat.io/company/ab12c58d-a678-4ebf-a159-ae99e1807bd0'
+                    dataConnections: []
+                    created: '2022-11-10T10:45:18Z'
+                    createdByUserName: Dan Tzabar
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      operationId: get-companies-companyId
+      description: Get data on a single company
+    delete:
+      summary: Delete a company
+      operationId: delete-companies-companyId
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      description: |-
+        Delete the given company from Codat.
+        This operation is not reversible.
+      tags:
+        - Companies
+    put:
+      summary: Update a company name
+      operationId: put-companies-companyId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      description: Updates the given company with a new name
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              x-examples:
+                example-1:
+                  name: foo
+            examples:
+              example-1:
+                value:
+                  name: New Name
+      tags:
+        - Companies
+  '/companies/{companyId}/connections':
+    parameters:
+      - $ref: '#/components/parameters/companyId'
+    get:
+      summary: List data connections
+      tags:
+        - Data Connections
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  example-1:
+                    results:
+                      - id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        integrationId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        integrationKey: string
+                        sourceId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        platformName: string
+                        linkUrl: string
+                        status: string
+                        lastSync: '2022-11-10T11:42:26.059Z'
+                        created: '2022-11-10T11:42:26.059Z'
+                        sourceType: string
+                        dataConnectionErrors:
+                          - statusCode: string
+                            statusText: string
+                            errorMessage: string
+                            erroredOnUtc: '2022-11-10T11:42:26.059Z'
+                        connectionInfo:
+                          additionalProp1: string
+                          additionalProp2: string
+                          additionalProp3: string
+                    pageNumber: 0
+                    pageSize: 0
+                    totalResults: 0
+                    _links:
+                      self:
+                        href: string
+                      current:
+                        href: string
+                      next:
+                        href: string
+                      previous:
+                        href: string
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DataConnection'
+                  pageNumber:
+                    type: integer
+                  pageSize:
+                    type: integer
+                  totalResults:
+                    type: integer
+                  _links:
+                    type: object
+                    properties:
+                      self:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+                      current:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+                      next:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+                      previous:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+        '400':
+          $ref: '#/components/responses/Malformed-Query'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      operationId: list-data-connections
+      description: List the data connections for a company
+      parameters:
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/orderBy'
+    post:
+      summary: Create a data connection
+      operationId: create-data-connection
+      responses:
+        '200':
+          description: OK
+      description: Create a data connection for a company
+      tags:
+        - Data Connections
+  '/companies/{companyId}/connections/{dataConnectionId}':
+    parameters:
+      - $ref: '#/components/parameters/companyId'
+      - $ref: '#/components/parameters/dataConnectionId'
+    get:
+      summary: Your GET endpoint
+      tags:
+        - Data Connections
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataConnection'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      operationId: get-data-connection
+      description: Get a single data connection for a company
+components:
+  schemas:
+    Company:
+      type: object
+      x-examples:
+        example-1:
+          id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          name: string
+          platform: string
+          redirect: string
+          lastSync: '2022-11-10T11:06:01.435Z'
+          dataConnections:
+            - id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+              integrationId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+              integrationKey: string
+              sourceId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+              platformName: string
+              linkUrl: string
+              status: string
+              lastSync: '2022-11-10T11:06:01.435Z'
+              created: '2022-11-10T11:06:01.435Z'
+              sourceType: string
+              dataConnectionErrors:
+                - statusCode: string
+                  statusText: string
+                  errorMessage: string
+                  erroredOnUtc: '2022-11-10T11:06:01.435Z'
+              connectionInfo:
+                additionalProp1: string
+                additionalProp2: string
+                additionalProp3: string
+          created: '2022-11-10T11:06:01.435Z'
+          createdByUserName: string
+      examples:
+        - id: ab12c58d-a678-4ebf-a159-ae99e1807bd0
+          name: My First Company
+          platform: ''
+          redirect: 'https://link.codat.io/company/ab12c58d-a678-4ebf-a159-ae99e1807bd0'
+          dataConnections: []
+          created: '2022-11-10T10:45:18Z'
+          createdByUserName: Dan Tzabar
+        - id: ab12c58d-a678-4ebf-a159-ae99e1807bd0
+          name: My First Company
+          platform: ''
+          redirect: 'https://link.codat.io/company/ab12c58d-a678-4ebf-a159-ae99e1807bd0'
+          dataConnections:
+            - id: a1617464-7f88-46ed-a0d1-1ac585ff7c1f
+              integrationId: 3485371f-930d-4614-997a-5dfa2cec546c
+              integrationKey: lqai
+              sourceId: f4319595-c20d-4b8c-bc9b-a6642e03c29b
+              platformName: Partner Commerce
+              linkUrl: 'https://link-api.codat.io/companies/b373cf43-44a9-4f7d-9ff3-d9d32da08dbb/connections/a1617464-7f88-46ed-a0d1-1ac585ff7c1f/start'
+              status: Linked
+              created: '2022-08-30T13:29:22Z'
+              sourceType: Commerce
+          created: '2022-11-10T10:45:18Z'
+          createdByUserName: Dan Tzabar
+      title: Company
+      description: 'A company in Codat represent a small or medium sized business, whose data you wish to share'
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        platform:
+          type: string
+        redirect:
+          type: string
+        lastSync:
+          type: string
+        dataConnections:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataConnection'
+        created:
+          type: string
+        createdByUserName:
+          type: string
+    DataConnection:
+      type: object
+      properties:
+        id:
+          type: string
+        integrationId:
+          type: string
+        integrationKey:
+          type: string
+        sourceId:
+          type: string
+        platformName:
+          type: string
+        linkUrl:
+          type: string
+        status:
+          type: string
+        lastSync:
+          type: string
+        created:
+          type: string
+        sourceType:
+          type: string
+        dataConnectionErrors:
+          type: array
+          items:
+            type: object
+            properties:
+              statusCode:
+                type: string
+              statusText:
+                type: string
+              errorMessage:
+                type: string
+              erroredOnUtc:
+                type: string
+        connectionInfo:
+          type: object
+          properties:
+            additionalProp1:
+              type: string
+            additionalProp2:
+              type: string
+            additionalProp3:
+              type: string
+      x-examples:
+        example-1:
+          id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          integrationId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          integrationKey: string
+          sourceId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          platformName: string
+          linkUrl: string
+          status: string
+          lastSync: '2022-11-10T11:32:54.551Z'
+          created: '2022-11-10T11:32:54.551Z'
+          sourceType: string
+          dataConnectionErrors:
+            - statusCode: string
+              statusText: string
+              errorMessage: string
+              erroredOnUtc: '2022-11-10T11:32:54.551Z'
+          connectionInfo:
+            additionalProp1: string
+            additionalProp2: string
+            additionalProp3: string
+      examples:
+        - id: ee2eb431-c0fa-4dc9-93fa-d29781c12bcd
+          integrationId: bf083d72-62c7-493e-aec9-81b4dbba7e2c
+          integrationKey: dfxm
+          sourceId: bdd831ce-eebd-4896-89a7-20e5ee8989ee
+          platformName: Basiq
+          linkUrl: 'https://link-api.codat.io/companies/86bd88cb-44ab-4dfb-b32f-87b19b14287f/connections/ee2eb431-c0fa-4dc9-93fa-d29781c12bcd/start'
+          status: Linked
+          lastSync: '2022-10-27T10:22:43.6464237Z'
+          created: '2022-10-27T09:53:29Z'
+          sourceType: Banking
+      title: Data Connection
+      description: 'Represents the connection between a source of data, and a Codat company'
+  securitySchemes:
+    API_Key:
+      name: Authorization
+      type: apiKey
+      in: header
+      description: Your base 64 encoded Codat API Key
+  responses:
+    Unauthorized:
+      description: Your API request was not properly authorized.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+              service:
+                type: string
+              error:
+                type: string
+              correlationId:
+                type: string
+              canBeRetried:
+                type: string
+              detailedErrorCode:
+                type: integer
+            x-examples:
+              example-1:
+                statusCode: 401
+                service: PublicApi
+                error: Unauthorized
+                correlationId: 7eb40d6b415d7bcd99ce658268284056
+                canBeRetried: Unknown
+                detailedErrorCode: 0
+          examples:
+            example-1:
+              value:
+                statusCode: 401
+                service: PublicApi
+                error: Unauthorized
+                correlationId: 7eb40d6b415d7bcd99ce658268284056
+                canBeRetried: Unknown
+                detailedErrorCode: 0
+    Malformed-Query:
+      description: Your `query` parameter was not correctly formed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+              service:
+                type: string
+              error:
+                type: string
+              correlationId:
+                type: string
+              canBeRetried:
+                type: string
+              detailedErrorCode:
+                type: integer
+            x-examples:
+              example-1:
+                statusCode: 400
+                service: ClientsApi
+                error: Error parsing query - Malformed query.
+                correlationId: bc997528a9d7abb9161ef45f05d38599
+                canBeRetried: Unknown
+                detailedErrorCode: 0
+          examples:
+            example-1:
+              value:
+                statusCode: 400
+                service: ClientsApi
+                error: Error parsing query - Malformed query.
+                correlationId: bc997528a9d7abb9161ef45f05d38599
+                canBeRetried: Unknown
+                detailedErrorCode: 0
+  parameters:
+    companyId:
+      name: companyId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: GUID of your company
+    dataConnectionId:
+      name: dataConnectionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: ID of your company's data connection
+    pageSize:
+      name: pageSize
+      in: query
+      required: true
+      schema:
+        type: number
+        default: 100
+        example: 100
+        minimum: 1
+        maximum: 5000
+      description: Number of records to return on the page
+    page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: number
+        minimum: 0
+        example: 1
+        default: 1
+      description: Page Number
+    query:
+      name: query
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Codat Query String
+    orderBy:
+      name: orderBy
+      in: query
+      required: false
+      schema:
+        type: string
+x-extension-2: null
