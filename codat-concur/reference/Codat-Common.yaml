@@ -231,7 +231,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/companyId'
     get:
-      summary: Get a single company
+      summary: Get company
       tags:
         - Companies
       responses:
@@ -257,7 +257,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
       operationId: get-companies-companyId
-      description: Get data on a single company
+      description: Get metadata for a single company
     delete:
       summary: Delete a company
       operationId: delete-companies-companyId
@@ -408,7 +408,7 @@ paths:
       - $ref: '#/components/parameters/companyId'
       - $ref: '#/components/parameters/dataConnectionId'
     get:
-      summary: Your GET endpoint
+      summary: Get data connection
       tags:
         - Data Connections
       responses:
@@ -446,7 +446,7 @@ paths:
               Example:
                 value: true
     delete:
-      summary: Delete Connection
+      summary: Delete data connection
       operationId: delete-dataConnection
       responses:
         '200':
@@ -501,7 +501,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/companyId'
     post:
-      summary: ''
+      summary: Queue pull operations
       operationId: create--many-pull-operations
       responses:
         '204':
@@ -518,7 +518,7 @@ paths:
       - $ref: '#/components/parameters/companyId'
       - $ref: '#/components/parameters/dataType'
     post:
-      summary: Queue single pull operation
+      summary: Queue pull operation
       operationId: create-pull-operation
       responses:
         '200':
@@ -533,7 +533,7 @@ paths:
           $ref: '#/components/responses/Not-Found'
       tags:
         - Companies
-      description: Queue a single pull operation for the given company and datatype
+      description: Queue a single pull operation for the given company and data type
       parameters:
         - schema:
             type: string
@@ -603,67 +603,33 @@ components:
       properties:
         id:
           type: string
+          format: uuid
+          example: 0498e921-9b53-4396-a412-4f2f5983b0a2
         name:
           type: string
         platform:
           type: string
+          deprecated: true
         redirect:
           type: string
+          format: uri
+          example: 'https://link.codat.io/company/27628208-459c-46a2-a705-5641ce25f739'
         lastSync:
+          type: string
+          format: date-time
+          example: '2022-01-01T12:00:00.000Z'
+        created:
+          type: string
+          format: date-time
+          example: '2022-01-01T12:00:00.000Z'
+        createdByUserName:
           type: string
         dataConnections:
           type: array
           items:
             $ref: '#/components/schemas/DataConnection'
-        created:
-          type: string
-        createdByUserName:
-          type: string
     DataConnection:
       type: object
-      properties:
-        id:
-          type: string
-        integrationId:
-          type: string
-        integrationKey:
-          type: string
-        sourceId:
-          type: string
-        platformName:
-          type: string
-        linkUrl:
-          type: string
-        status:
-          type: string
-        lastSync:
-          type: string
-        created:
-          type: string
-        sourceType:
-          type: string
-        dataConnectionErrors:
-          type: array
-          items:
-            type: object
-            properties:
-              statusCode:
-                type: string
-              statusText:
-                type: string
-              errorMessage:
-                type: string
-              erroredOnUtc:
-                type: string
-        connectionInfo:
-          type: object
-          properties:
-            additionalProp1:
-              type: string
-            additionalProp2:
-              type: string
-            additionalProp3:
-              type: string
       x-examples:
         example-1:
           id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
@@ -698,27 +664,76 @@ components:
           sourceType: Banking
       title: Data Connection
       description: 'Represents the connection between a source of data, and a Codat company'
-    PullOperation:
-      type: object
       properties:
         id:
           type: string
-        companyId:
+          format: uuid
+          example: 33e35bb4-93e7-441f-b651-f46ca049367b
+        integrationId:
           type: string
-        connectionId:
+          format: uuid
+          example: fd321cb6-7963-4506-b873-e99593a45e30
+        integrationKey:
           type: string
-        dataType:
+        sourceId:
           type: string
+          format: uuid
+          example: 35b92968-9851-4095-ad60-395c95cbcba4
+        platformName:
+          type: string
+        linkUrl:
+          type: string
+          format: uri
+          example: 'https://link-api.codat.io/companies/86bd88cb-44ab-4dfb-b32f-87b19b14287f/connections/2e2eb431-c1fa-4dc9-93fa-d29781c12bcd/start'
         status:
           type: string
-        requested:
+          enum:
+            - PendingAuth
+            - Linked
+            - Unlinked
+            - Deauthorized
+          example: Linked
+        lastSync:
           type: string
-        progress:
-          type: integer
-        isCompleted:
-          type: boolean
-        isErrored:
-          type: boolean
+          format: date-time
+          example: '2022-01-01T12:00:00.000Z'
+        created:
+          type: string
+          format: date-time
+          example: '2022-01-01T12:00:00.000Z'
+        sourceType:
+          type: string
+          enum:
+            - accounting
+            - banking
+            - commerce
+          example: accounting
+        dataConnectionErrors:
+          type: array
+          items:
+            type: object
+            properties:
+              statusCode:
+                type: string
+              statusText:
+                type: string
+              errorMessage:
+                type: string
+              erroredOnUtc:
+                type: string
+                format: date-time
+                example: '2022-01-01T12:00:00.000Z'
+        connectionInfo:
+          type: object
+          properties:
+            additionalProp1:
+              type: string
+            additionalProp2:
+              type: string
+            additionalProp3:
+              type: string
+    PullOperation:
+      type: object
       x-examples:
         example-1:
           id: 97d60846-f07a-4d42-b5a0-0bdcc6ebf56b
@@ -744,6 +759,50 @@ components:
       description: |-
         Information about a queued, in progress or completed pull operation.
         *Formally called `dataset`*
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 943accd0-4247-42d8-865b-363c8629e1da
+        companyId:
+          type: string
+          format: uuid
+          example: 22ece347-e5f6-4896-95e0-35a4c7f17023
+        connectionId:
+          type: string
+          format: uuid
+          example: 50830828-7d39-4367-b0eb-5ddb2de5faa5
+        dataType:
+          type: string
+        status:
+          type: string
+          enum:
+            - Unknown
+            - Pending
+            - Success
+            - Failure
+            - TimeOut
+          example: Pending
+        requested:
+          type: string
+          format: date-time
+          example: '2022-01-01T12:00:00.000Z'
+        progress:
+          type: integer
+        isCompleted:
+          type: boolean
+        isErrored:
+          type: boolean
+      required:
+        - id
+        - companyId
+        - connectionId
+        - dataType
+        - status
+        - requested
+        - progress
+        - isCompleted
+        - isErrored
   securitySchemes:
     API_Key:
       name: Authorization
