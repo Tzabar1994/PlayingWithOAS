@@ -486,7 +486,6 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 x-examples:
                   example-1:
                     results:
@@ -515,6 +514,8 @@ paths:
                     items:
                       $ref: '#/components/schemas/Webhook'
                 allOf:
+                  - type: object
+                    $ref: '#/components/schemas/_Links'
                   - $ref: '#/components/schemas/_Links'
               examples:
                 Example:
@@ -533,30 +534,6 @@ paths:
                         href: /rules?page=1&pageSize=100
                       self:
                         href: /rules
-                example-1:
-                  value:
-                    results:
-                      - id: ff89c50e-a719-4ef5-a182-9917e53927b6
-                        type: string
-                        companyId: string
-                        notifiers:
-                          emails:
-                            - info@client.com
-                          webhook: 'https://webhook.client.com'
-                    _links:
-                      _links:
-                        self:
-                          href: ../dictionary
-                        current:
-                          href: ../dictionary
-                        next:
-                          href: ../dictionary
-                        previous:
-                          href: ../dictionary
-                        '': string
-                      pageNumber: 0
-                      pageSize: 0
-                      totalResults: 0
         '400':
           $ref: '#/components/responses/Malformed-Query'
         '401':
@@ -596,8 +573,19 @@ paths:
       summary: Get webhook
       tags:
         - Webhooks
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/Not-Found'
       operationId: get-webhook
+      description: Get a single webhook
 components:
   schemas:
     Company:
