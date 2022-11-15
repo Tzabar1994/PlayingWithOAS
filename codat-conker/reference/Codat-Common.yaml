@@ -587,6 +587,17 @@ paths:
             schema:
               $ref: '#/components/schemas/Webhook'
         description: Create a webhook with the given configuration.
+      tags:
+        - Webhooks
+  '/rules/{ruleId}':
+    parameters:
+      - $ref: '#/components/parameters/ruleId'
+    get:
+      summary: Get webhook
+      tags:
+        - Webhooks
+      responses: {}
+      operationId: get-webhook
 components:
   schemas:
     Company:
@@ -674,6 +685,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DataConnection'
+      required:
+        - id
+        - name
+        - redirect
     DataConnection:
       type: object
       x-examples:
@@ -778,6 +793,16 @@ components:
               type: string
             additionalProp3:
               type: string
+      required:
+        - id
+        - integrationId
+        - integrationKey
+        - sourceId
+        - platformName
+        - linkUrl
+        - status
+        - created
+        - sourceType
     PullOperation:
       type: object
       x-examples:
@@ -862,6 +887,14 @@ components:
             webhook: string
       title: Webhook
       description: Configuration to alert to a url or list of email addresses based on the given type / condition.
+      examples:
+        - id: ff89c50e-a719-4ef5-a182-9917e53927b6
+          type: string
+          companyId: 39b73b17-cc2e-429e-915d-71654e9dcd1e
+          notifiers:
+            emails:
+              - info@client.com
+            webhook: 'https://webhook.client.com'
       properties:
         id:
           type: string
@@ -886,14 +919,10 @@ components:
               type: string
               format: uri
               example: 'https://webhook.client.com'
-      examples:
-        - id: ff89c50e-a719-4ef5-a182-9917e53927b6
-          type: string
-          companyId: 39b73b17-cc2e-429e-915d-71654e9dcd1e
-          notifiers:
-            emails:
-              - info@client.com
-            webhook: 'https://webhook.client.com'
+      required:
+        - id
+        - type
+        - notifiers
     _Links:
       x-examples:
         example-1:
@@ -918,7 +947,6 @@ components:
               href: ../dictionary
             previous:
               href: ../dictionary
-            '': string
           pageNumber: 0
           pageSize: 0
           totalResults: 0
@@ -926,15 +954,22 @@ components:
         - properties:
             _links:
               type: object
+              required:
+                - self
+                - current
               properties:
                 self:
                   type: object
+                  required:
+                    - href
                   properties:
                     href:
                       type: string
                       format: uri-reference
                 current:
                   type: object
+                  required:
+                    - href
                   properties:
                     href:
                       type: string
@@ -951,14 +986,17 @@ components:
                     href:
                       type: string
                       format: uri-reference
-                '':
-                  type: string
             pageNumber:
               type: integer
             pageSize:
               type: integer
             totalResults:
               type: integer
+          required:
+            - _links
+            - pageNumber
+            - pageSize
+            - totalResults
       type: object
   securitySchemes:
     API_Key:
@@ -1155,4 +1193,13 @@ components:
           - customers
         example: customers
       description: A key for a Codat data type
+    ruleId:
+      name: ruleId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 7318949f-c008-4936-a8ff-10d7ab563fa6
+      description: ID of the webhook or rule
 x-extension-2: null
