@@ -3,7 +3,7 @@ window.onload = function() {
 
   // the following lines will be replaced by docker/configurator, when it runs in a docker-container
   window.ui = SwaggerUIBundle({
-    url: "https://raw.githubusercontent.com/Tzabar1994/PlayingWithOAS/main/codat-concur/reference/Codat-Common2.yaml",
+    url: "https://raw.githubusercontent.com/Tzabar1994/PlayingWithOAS/main/codat-conker/reference/Codat-Common2.yaml",
     dom_id: '#swagger-ui',
     deepLinking: true,
     presets: [
