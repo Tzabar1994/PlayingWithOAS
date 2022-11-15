@@ -86,7 +86,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
       operationId: list-companies
-      description: List all companies that you have created in Codat
+      description: List all companies that you have created in Codat.
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
