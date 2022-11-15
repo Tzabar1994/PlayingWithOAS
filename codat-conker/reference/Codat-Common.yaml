@@ -5,6 +5,9 @@ info:
   title: Codat
   version: '1.0'
   summary: Codat Common
+  license:
+    name: Apache 2.0
+    identifier: Apache-2.0
   description: |-
     Common API to all of Codat's products.
     Covers creating and managing your companies, data connections, integrations and probably more!
@@ -22,6 +25,8 @@ tags:
     description: Endpoints to manage your companies' data connections
   - name: Migrations
     description: Endpoints that allow you to migrate existing connections into Codat.
+  - name: Webhooks
+    description: 'Endpoints to manage webhooks, rules and alerts.'
 paths:
   /companies:
     get:
@@ -34,84 +39,14 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                x-examples:
-                  example-1:
-                    results:
-                      - id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-                        name: string
-                        platform: string
-                        redirect: string
-                        lastSync: '2022-11-10T10:34:06.478Z'
-                        dataConnections:
-                          - id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-                            integrationId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-                            integrationKey: string
-                            sourceId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-                            platformName: string
-                            linkUrl: string
-                            status: string
-                            lastSync: '2022-11-10T10:34:06.478Z'
-                            created: '2022-11-10T10:34:06.478Z'
-                            sourceType: string
-                            dataConnectionErrors:
-                              - statusCode: string
-                                statusText: string
-                                errorMessage: string
-                                erroredOnUtc: '2022-11-10T10:34:06.478Z'
-                            connectionInfo:
-                              additionalProp1: string
-                              additionalProp2: string
-                              additionalProp3: string
-                        created: '2022-11-10T10:34:06.478Z'
-                        createdByUserName: string
-                    pageNumber: 0
-                    pageSize: 0
-                    totalResults: 0
-                    _links:
-                      self:
-                        href: string
-                      current:
-                        href: string
-                      next:
-                        href: string
-                      previous:
-                        href: string
-                properties:
-                  results:
-                    type: array
-                    items: {}
-                  pageNumber:
-                    type: integer
-                  pageSize:
-                    type: integer
-                  totalResults:
-                    type: integer
-                  '':
-                    type: string
-                  _links:
+                allOf:
+                  - properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Company'
                     type: object
-                    properties:
-                      self:
-                        type: object
-                        properties:
-                          href:
-                            type: string
-                      current:
-                        type: object
-                        properties:
-                          href:
-                            type: string
-                      next:
-                        type: object
-                        properties:
-                          href:
-                            type: string
-                      previous:
-                        type: object
-                        properties:
-                          href:
-                            type: string
+                  - $ref: '#/components/schemas/_Links'
               examples:
                 List of Companies:
                   value:
@@ -314,7 +249,6 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 x-examples:
                   example-1:
                     results:
@@ -349,40 +283,40 @@ paths:
                         href: string
                       previous:
                         href: string
-                properties:
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/DataConnection'
-                  pageNumber:
-                    type: integer
-                  pageSize:
-                    type: integer
-                  totalResults:
-                    type: integer
-                  _links:
-                    type: object
+                allOf:
+                  - type: object
                     properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/DataConnection'
+                  - $ref: '#/components/schemas/_Links'
+              examples:
+                example-1:
+                  value:
+                    results:
+                      - id: ee2eb431-c0fa-4dc9-93fa-d29781c12bcd
+                        integrationId: bf083d72-62c7-493e-aec9-81b4dbba7e2c
+                        integrationKey: dfxm
+                        sourceId: bdd831ce-eebd-4896-89a7-20e5ee8989ee
+                        platformName: Basiq
+                        linkUrl: 'https://link-api.codat.io/companies/86bd88cb-44ab-4dfb-b32f-87b19b14287f/connections/ee2eb431-c0fa-4dc9-93fa-d29781c12bcd/start'
+                        status: Linked
+                        lastSync: '2022-10-27T10:22:43.6464237Z'
+                        created: '2022-10-27T09:53:29Z'
+                        sourceType: Banking
+                    pageNumber: 0
+                    pageSize: 0
+                    totalResults: 0
+                    _links:
                       self:
-                        type: object
-                        properties:
-                          href:
-                            type: string
+                        href: string
                       current:
-                        type: object
-                        properties:
-                          href:
-                            type: string
+                        href: string
                       next:
-                        type: object
-                        properties:
-                          href:
-                            type: string
+                        href: string
                       previous:
-                        type: object
-                        properties:
-                          href:
-                            type: string
+                        href: string
         '400':
           $ref: '#/components/responses/Malformed-Query'
         '401':
@@ -541,6 +475,118 @@ paths:
           in: query
           name: connectionId
           description: 'Optionally, provide a data connection id to only queue pull operations on that connection.'
+  /rules:
+    get:
+      summary: List webhooks
+      tags:
+        - Webhooks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  example-1:
+                    results:
+                      - id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        type: string
+                        companyId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        notifiers:
+                          emails:
+                            - string
+                          webhook: string
+                    pageNumber: 0
+                    pageSize: 0
+                    totalResults: 0
+                    _links:
+                      self:
+                        href: string
+                      current:
+                        href: string
+                      next:
+                        href: string
+                      previous:
+                        href: string
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Webhook'
+                allOf:
+                  - $ref: '#/components/schemas/_Links'
+              examples:
+                Example:
+                  value:
+                    results:
+                      - id: fcfbfe0b-fe73-47ed-a7fe-0018567f5da2
+                        type: DataConnectionStatusChanged
+                        notifiers:
+                          emails: []
+                          webhook: 'https://webhook.site/6d385ea9-bcf9-48e4-9103-1958ccb54997'
+                    pageNumber: 1
+                    pageSize: 100
+                    totalResults: 1
+                    _links:
+                      current:
+                        href: /rules?page=1&pageSize=100
+                      self:
+                        href: /rules
+                example-1:
+                  value:
+                    results:
+                      - id: ff89c50e-a719-4ef5-a182-9917e53927b6
+                        type: string
+                        companyId: string
+                        notifiers:
+                          emails:
+                            - info@client.com
+                          webhook: 'https://webhook.client.com'
+                    _links:
+                      _links:
+                        self:
+                          href: ../dictionary
+                        current:
+                          href: ../dictionary
+                        next:
+                          href: ../dictionary
+                        previous:
+                          href: ../dictionary
+                        '': string
+                      pageNumber: 0
+                      pageSize: 0
+                      totalResults: 0
+        '400':
+          $ref: '#/components/responses/Malformed-Query'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      operationId: list-rules
+      description: List webhooks that you are subscribed to.
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/orderBy'
+    post:
+      summary: Create webhook
+      operationId: post-rules
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      description: Create a new webhook configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Webhook'
+        description: Create a webhook with the given configuration.
 components:
   schemas:
     Company:
@@ -641,7 +687,7 @@ components:
           status: string
           lastSync: '2022-11-10T11:32:54.551Z'
           created: '2022-11-10T11:32:54.551Z'
-          sourceType: string
+          sourceType: Accounting
           dataConnectionErrors:
             - statusCode: string
               statusText: string
@@ -703,11 +749,11 @@ components:
           example: '2022-01-01T12:00:00.000Z'
         sourceType:
           type: string
+          example: Accounting
           enum:
-            - accounting
-            - banking
-            - commerce
-          example: accounting
+            - Accounting
+            - Banking
+            - Commerce
         dataConnectionErrors:
           type: array
           items:
@@ -803,6 +849,117 @@ components:
         - progress
         - isCompleted
         - isErrored
+    Webhook:
+      type: object
+      x-examples:
+        example-1:
+          id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          type: string
+          companyId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          notifiers:
+            emails:
+              - string
+            webhook: string
+      title: Webhook
+      description: Configuration to alert to a url or list of email addresses based on the given type / condition.
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: ff89c50e-a719-4ef5-a182-9917e53927b6
+        type:
+          type: string
+        companyId:
+          type: string
+          format: uuid
+          example: 39b73b17-cc2e-429e-915d-71654e9dcd1e
+        notifiers:
+          type: object
+          properties:
+            emails:
+              type: array
+              items:
+                type: string
+                format: email
+                example: info@client.com
+            webhook:
+              type: string
+              format: uri
+              example: 'https://webhook.client.com'
+      examples:
+        - id: ff89c50e-a719-4ef5-a182-9917e53927b6
+          type: string
+          companyId: 39b73b17-cc2e-429e-915d-71654e9dcd1e
+          notifiers:
+            emails:
+              - info@client.com
+            webhook: 'https://webhook.client.com'
+    _Links:
+      x-examples:
+        example-1:
+          _links:
+            self:
+              href: string
+            current:
+              href: string
+            next:
+              href: string
+            previous:
+              href: string
+      title: _Links
+      description: Codat's Paging Model
+      examples:
+        - _links:
+            self:
+              href: ../dictionary
+            current:
+              href: ../dictionary
+            next:
+              href: ../dictionary
+            previous:
+              href: ../dictionary
+            '': string
+          pageNumber: 0
+          pageSize: 0
+          totalResults: 0
+      allOf:
+        - properties:
+            _links:
+              type: object
+              properties:
+                self:
+                  type: object
+                  properties:
+                    href:
+                      type: string
+                      format: uri-reference
+                current:
+                  type: object
+                  properties:
+                    href:
+                      type: string
+                      format: uri-reference
+                next:
+                  type: object
+                  properties:
+                    href:
+                      type: string
+                      format: uri-reference
+                previous:
+                  type: object
+                  properties:
+                    href:
+                      type: string
+                      format: uri-reference
+                '':
+                  type: string
+            pageNumber:
+              type: integer
+            pageSize:
+              type: integer
+            totalResults:
+              type: integer
+      type: object
   securitySchemes:
     API_Key:
       name: Authorization
@@ -979,6 +1136,7 @@ components:
       required: false
       schema:
         type: string
+      description: Field to order results by
     dataType:
       name: dataType
       in: path
