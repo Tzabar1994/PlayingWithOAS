@@ -471,7 +471,10 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/Not-Found'
-      description: Queue a single pull operation for the given company and data type
+      description: |-
+        Queue a single pull operation for the given company and data type.
+
+        This will bring updated data into Codat from the linked integration for you to view.
       parameters:
         - schema:
             type: string
