@@ -21,7 +21,7 @@ servers:
 tags:
   - name: Companies
     description: Endpoints to manage your Codat companies.
-  - name: Data Connections
+  - name: Connections
     description: Endpoints to manage your companies' data connections.
   - name: Migrations
     description: Endpoints that allow you to migrate existing connections into Codat.
@@ -248,7 +248,7 @@ paths:
     get:
       summary: List connections
       tags:
-        - Data Connections
+        - Connections
       responses:
         '200':
           description: OK
@@ -342,7 +342,7 @@ paths:
           description: OK
       description: Create a data connection for a company
       tags:
-        - Data Connections
+        - Connections
   '/companies/{companyId}/connections/{connectionId}':
     parameters:
       - $ref: '#/components/parameters/companyId'
@@ -350,7 +350,7 @@ paths:
     get:
       summary: Get connection
       tags:
-        - Data Connections
+        - Connections
       responses:
         '200':
           description: OK
@@ -399,7 +399,7 @@ paths:
         Revoke and remove a connection from a company.
         This operation is not reversible - the end user would need to reauthorize a new data connection if you wish to view new data for this company.
       tags:
-        - Data Connections
+        - Connections
     patch:
       summary: Unlink connection
       operationId: patch-company-connection
@@ -420,7 +420,7 @@ paths:
           $ref: '#/components/responses/Not-Found'
       description: 'This allows you to deauthorize a connection, without deleting it from Codat. This means you can still view any data that has previously been pulled into Codat, and also lets you re-authorize in future if your customer wishes to resume sharing their data.'
       tags:
-        - Data Connections
+        - Connections
       requestBody:
         content:
           application/json:
