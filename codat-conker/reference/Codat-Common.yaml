@@ -689,7 +689,7 @@ paths:
       - $ref: '#/components/parameters/companyId'
       - $ref: '#/components/parameters/datasetId'
     get:
-      summary: Get Pull Operation
+      summary: Get pull operation
       tags:
         - Company Status
       responses:
