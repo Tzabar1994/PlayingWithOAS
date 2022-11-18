@@ -13,10 +13,10 @@ servers:
   - url: 'https://api.codat.io'
     description: Codat
 paths:
-  '/companies/{companyId}/connections/{dataConnectionId}/data/commerce-customers':
+  '/companies/{companyId}/connections/{connectionId}/data/commerce-customers':
     parameters:
       - $ref: ./Codat-Common.yaml#/components/parameters/companyId
-      - $ref: ./Codat-Common.yaml#/components/parameters/dataConnectionId
+      - $ref: ./Codat-Common.yaml#/components/parameters/connectionId
     get:
       summary: List commerce customers
       tags: []
@@ -69,10 +69,10 @@ paths:
         - $ref: ./Codat-Common.yaml#/components/parameters/pageSize
         - $ref: ./Codat-Common.yaml#/components/parameters/query
         - $ref: ./Codat-Common.yaml#/components/parameters/orderBy
-  '/companies/{companyId}/connections/{dataConnectionId}/data/commerce-payments':
+  '/companies/{companyId}/connections/{connectionId}/data/commerce-payments':
     parameters:
       - $ref: ./Codat-Common.yaml#/components/parameters/companyId
-      - $ref: ./Codat-Common.yaml#/components/parameters/dataConnectionId
+      - $ref: ./Codat-Common.yaml#/components/parameters/connectionId
     get:
       summary: List commerce payments
       tags: []
@@ -97,10 +97,10 @@ paths:
         - $ref: ./Codat-Common.yaml#/components/parameters/pageSize
         - $ref: ./Codat-Common.yaml#/components/parameters/query
         - $ref: ./Codat-Common.yaml#/components/parameters/orderBy
-  '/companies/{companyId}/connections/{dataConnectionId}/data/commerce-products':
+  '/companies/{companyId}/connections/{connectionId}/data/commerce-products':
     parameters:
       - $ref: ./Codat-Common.yaml#/components/parameters/companyId
-      - $ref: ./Codat-Common.yaml#/components/parameters/dataConnectionId
+      - $ref: ./Codat-Common.yaml#/components/parameters/connectionId
     get:
       summary: List commerce products
       tags: []
@@ -118,16 +118,16 @@ paths:
                         items:
                           $ref: ./Commerce/Product.yaml
                   - $ref: ./Codat-Common.yaml#/components/schemas/_Links
-      operationId: get-companies-companyId-connections-dataConnection-data-commerce-products
+      operationId: get-companies-companyId-connections-connection-data-commerce-products
       parameters:
         - $ref: ./Codat-Common.yaml#/components/parameters/page
         - $ref: ./Codat-Common.yaml#/components/parameters/pageSize
         - $ref: ./Codat-Common.yaml#/components/parameters/query
         - $ref: ./Codat-Common.yaml#/components/parameters/orderBy
-  '/companies/{companyId}/connections/{dataConnectionId}/data/commerce-transactions':
+  '/companies/{companyId}/connections/{connectionId}/data/commerce-transactions':
     parameters:
       - $ref: ./Codat-Common.yaml#/components/parameters/companyId
-      - $ref: ./Codat-Common.yaml#/components/parameters/dataConnectionId
+      - $ref: ./Codat-Common.yaml#/components/parameters/connectionId
     get:
       summary: List commerce transactions
       tags: []

@@ -295,7 +295,7 @@ paths:
                       results:
                         type: array
                         items:
-                          $ref: '#/components/schemas/DataConnection'
+                          $ref: '#/components/schemas/Connection'
                   - $ref: '#/components/schemas/_Links'
               examples:
                 example-1:
@@ -343,10 +343,10 @@ paths:
       description: Create a data connection for a company
       tags:
         - Data Connections
-  '/companies/{companyId}/connections/{dataConnectionId}':
+  '/companies/{companyId}/connections/{connectionId}':
     parameters:
       - $ref: '#/components/parameters/companyId'
-      - $ref: '#/components/parameters/dataConnectionId'
+      - $ref: '#/components/parameters/connectionId'
     get:
       summary: Get data connection
       tags:
@@ -357,7 +357,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DataConnection'
+                $ref: '#/components/schemas/Connection'
               examples:
                 example-1:
                   value:
@@ -413,7 +413,7 @@ paths:
                 properties: {}
             application/xml:
               schema:
-                $ref: '#/components/schemas/DataConnection'
+                $ref: '#/components/schemas/Connection'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -848,12 +848,12 @@ components:
         dataConnections:
           type: array
           items:
-            $ref: '#/components/schemas/DataConnection'
+            $ref: '#/components/schemas/Connection'
       required:
         - id
         - name
         - redirect
-    DataConnection:
+    Connection:
       type: object
       x-examples:
         example-1:
@@ -887,7 +887,7 @@ components:
           lastSync: '2022-10-27T10:22:43.6464237Z'
           created: '2022-10-27T09:53:29Z'
           sourceType: Banking
-      title: Data Connection
+      title: Connection
       description: 'Represents the connection between a source of data, and a Codat company'
       properties:
         id:
@@ -967,6 +967,8 @@ components:
         - status
         - created
         - sourceType
+      x-stoplight:
+        id: 35df6443f7c9d
     PullOperation:
       type: object
       x-examples:
@@ -1449,8 +1451,8 @@ components:
         type: string
         format: uuid
       description: UUID of your SME
-    dataConnectionId:
-      name: dataConnectionId
+    connectionId:
+      name: connectionId
       in: path
       required: true
       schema:
