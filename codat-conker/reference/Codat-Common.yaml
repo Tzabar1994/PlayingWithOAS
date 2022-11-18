@@ -27,6 +27,8 @@ tags:
     description: Endpoints that allow you to migrate existing connections into Codat.
   - name: Webhooks
     description: 'Endpoints to manage webhooks, rules and alerts.'
+  - name: Company Status
+    description: Understand the state of data within Codat.
 paths:
   /companies:
     get:
@@ -586,6 +588,123 @@ paths:
           $ref: '#/components/responses/Not-Found'
       operationId: get-webhook
       description: Get a single webhook
+  '/companies/{companyId}/dataStatus':
+    parameters:
+      - $ref: '#/components/parameters/companyId'
+    get:
+      summary: Get data status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/DataStatus'
+                  - $ref: '#/components/schemas/DataStatus'
+              examples:
+                Example:
+                  value:
+                    invoices:
+                      dataType: invoices
+                      lastSuccessfulSync: '2022-01-01T00:00:00.000Z'
+                      currentStatus: success
+                      latestSyncId: d03b6979-eb3b-447a-a27a-13cf457a9f48
+                      latestSuccessfulSyncId: 6883bba8-514d-423f-ba7f-c38285a80b7f
+                    bills:
+                      dataType: bills
+                      lastSuccessfulSync: '2022-01-01T00:00:00.000Z'
+                      currentStatus: failure
+                      latestSyncId: d03b6979-eb3b-447a-a27a-13cf457a9f48
+                      latestSuccessfulSyncId: 6883bba8-514d-423f-ba7f-c38285a80b7f
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/Not-Found'
+      operationId: get-companies-companyId-dataStatus
+      description: Get the state of each data type for a company
+      tags:
+        - Company Status
+  '/companies/{companyId}/data/history':
+    parameters:
+      - $ref: '#/components/parameters/companyId'
+    get:
+      summary: Get data history
+      tags:
+        - Company Status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/PullOperation'
+                  - $ref: '#/components/schemas/_Links'
+              examples:
+                Example:
+                  value:
+                    results:
+                      - id: 97d60846-f07a-4d42-b5a0-0bdcc6ebf56b
+                        companyId: 4645bd78-8988-45bc-ac9e-67ba5df6e4e5
+                        connectionId: 51baa045-4836-4317-a42e-3542e991e581
+                        dataType: invoices
+                        status: Initial
+                        requested: '2022-11-14T11:18:37.2798351Z'
+                        progress: 10
+                        isCompleted: false
+                        isErrored: false
+                    _links:
+                      self:
+                        href: ../dictionary
+                      current:
+                        href: ../dictionary
+                      next:
+                        href: ../dictionary
+                      previous:
+                        href: ../dictionary
+                    pageNumber: 0
+                    pageSize: 0
+                    totalResults: 0
+        '400':
+          $ref: '#/components/responses/Malformed-Query'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/Not-Found'
+      operationId: get-company-data-history
+      description: Get the pull operation history for a given company.
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/orderBy'
+  '/companies/{companyId}/data/history/{datasetId}':
+    parameters:
+      - $ref: '#/components/parameters/companyId'
+      - $ref: '#/components/parameters/datasetId'
+    get:
+      summary: Get Pull Operation
+      tags:
+        - Company Status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullOperation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/Not-Found'
+      operationId: get-pull-operation
+      description: Retrieve information about a single dataset or pull operation
 components:
   schemas:
     Company:
@@ -986,6 +1105,158 @@ components:
             - pageSize
             - totalResults
       type: object
+    DataStatus:
+      type: object
+      x-examples:
+        example-1:
+          additionalProp1:
+            dataType: string
+            lastSuccessfulSync: '2022-11-18T14:52:23.923Z'
+            currentStatus: string
+            latestSyncId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            latestSuccessfulSyncId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      properties:
+        dataType:
+          type: object
+          properties:
+            dataType:
+              type: string
+            lastSuccessfulSync:
+              type: string
+            currentStatus:
+              type: string
+            latestSyncId:
+              type: string
+            latestSuccessfulSyncId:
+              type: string
+      examples:
+        - invoices:
+            dataType: invoices
+            lastSuccessfulSync: '2022-01-01T00:00:00.000Z'
+            currentStatus: success
+            latestSyncId: d03b6979-eb3b-447a-a27a-13cf457a9f48
+            latestSuccessfulSyncId: 6883bba8-514d-423f-ba7f-c38285a80b7f
+      title: DataStatus
+      description: Describes the state of data in the Codat cache for a company and data type
+    DatatypeFeature:
+      type: object
+      x-examples:
+        example-1:
+          datatype: string
+          supportedFeatures:
+            - featureType: string
+              featureState: string
+      properties:
+        datatype:
+          type: string
+        supportedFeatures:
+          type: array
+          items:
+            type: object
+            properties:
+              featureType:
+                type: string
+              featureState:
+                type: string
+                enum:
+                  - unknown
+                  - release
+                  - beta
+                  - deprecated
+                example: release
+            required:
+              - featureType
+              - featureState
+      required:
+        - supportedFeatures
+      title: DataType Feature
+      description: Describes support for a given datatype and associated operations
+    Integration:
+      type: object
+      x-examples:
+        example-1:
+          key: string
+          logoUrl: string
+          name: string
+          enabled: true
+          sourceId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          integrationId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          sourceType: Unknown
+          isOfflineConnector: true
+          isBeta: true
+          supportedEnvironments: Unknown
+          linkedConnectionsCount: 0
+          totalConnectionsCount: 0
+          dataProvidedBy: Unknown
+          datatypeFeatures:
+            - datatype: string
+              supportedFeatures:
+                - featureType: string
+                  featureState: string
+      examples:
+        - key: gbol
+          logoUrl: 'http://example.com'
+          name: Xero
+          enabled: true
+          sourceId: accounting
+          integrationId: 497a18ca-284e-40c0-985d-f72be35d468e
+          sourceType: 8193a927-ab7a-45a3-9dc2-d357a4932dfe
+          isOfflineConnector: true
+          isBeta: true
+          dataProvidedBy: string
+          datatypeFeatures:
+            - datatype: string
+              supportedFeatures:
+                - featureType: string
+                  featureState: release
+      properties:
+        key:
+          type: string
+          maxLength: 4
+          minLength: 4
+          pattern: '[a-z]{4}'
+          example: gbol
+        logoUrl:
+          type: string
+          format: uri
+        name:
+          type: string
+          example: Xero
+        enabled:
+          type: boolean
+          description: Whether this integration is enabled for your customers to use
+        sourceId:
+          type: string
+          enum:
+            - accounting
+            - banking
+            - commerce
+            - other
+            - unknown
+          example: accounting
+        integrationId:
+          type: string
+          format: uuid
+        sourceType:
+          type: string
+          format: uuid
+        isOfflineConnector:
+          type: boolean
+        isBeta:
+          type: boolean
+        dataProvidedBy:
+          type: string
+        datatypeFeatures:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatatypeFeature'
+      required:
+        - key
+        - logoUrl
+        - name
+        - enabled
+      title: Integration
+      description: An integration that Codat supports
   securitySchemes:
     API_Key:
       name: Authorization
@@ -1142,7 +1413,7 @@ components:
     page:
       name: page
       in: query
-      required: false
+      required: true
       schema:
         type: number
         minimum: 0
@@ -1190,4 +1461,14 @@ components:
         format: uuid
         example: 7318949f-c008-4936-a8ff-10d7ab563fa6
       description: ID of the webhook or rule
-x-extension-2: null
+    datasetId:
+      name: datasetId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: eaed9f0f-e77b-4bc9-a58f-ab8b4b99ab18
+      description: ID of a dataset or pull operation
+security:
+  - API_Key: []
