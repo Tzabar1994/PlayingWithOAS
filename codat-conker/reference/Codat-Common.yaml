@@ -636,7 +636,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/companyId'
     get:
-      summary: Get data history
+      summary: Get pull operations
       tags:
         - Company Status
       responses:
@@ -685,7 +685,7 @@ paths:
         '404':
           $ref: '#/components/responses/Not-Found'
       operationId: get-company-data-history
-      description: Get the pull operation history for a given company.
+      description: Gets the pull operation history (datasets) for a given company.
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
@@ -746,7 +746,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/platformKey'
     get:
-      summary: Your GET endpoint
+      summary: Get integration
       tags:
         - Integrations
       responses:
@@ -761,6 +761,7 @@ paths:
         '404':
           $ref: '#/components/responses/Not-Found'
       operationId: get-integrations-platformKey
+      description: ''
 components:
   schemas:
     Company:
