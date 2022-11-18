@@ -704,7 +704,7 @@ paths:
         '404':
           $ref: '#/components/responses/Not-Found'
       operationId: get-pull-operation
-      description: Retrieve information about a single dataset or pull operation
+      description: Retrieve information about a single dataset or pull operation.
 components:
   schemas:
     Company:
