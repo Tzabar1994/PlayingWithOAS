@@ -1,0 +1,14 @@
+type: object
+x-stoplight:
+  id: ug7vf4twr9w67
+properties:
+  modifiedDate:
+    description: The date on which this record was last modified in Codat.
+    type: string
+    format: date-time
+    readOnly: true
+  sourceModifiedDate:
+    description: The date on which this record was last modified in the originating system
+    type: string
+    format: date-time
+    readOnly: true

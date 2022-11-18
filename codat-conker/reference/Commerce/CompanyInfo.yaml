@@ -1,0 +1,123 @@
+title: Commerce-CompanyInfo
+description: |
+  In the Codat system, company information includes standard commercial details about 
+  a linked company, such as their address, phone number, and company registration.
+x-stoplight:
+  id: d7on55ll1hvqj
+type: object
+x-datatype:
+  dataTypeId: d68f4a5e-f1f8-40f0-a28d-565ef0733fb1
+  databaseId: 33
+  name: commerce-companyInfo
+  domain: commerce
+  singluar: company infomation
+  plural: company infomation
+  fetchMode: single
+properties:
+
+  companyName:
+    type: string
+    description: The name of the company
+    example: Codat
+
+  commercePlatformRef: 
+    type: string
+    description: Identifier or reference for the company in the commerce platform
+
+  companyLegalName:
+    type: string
+    description: The full legal name of the company
+    example: Codat Limited
+
+  addresses:
+    type: array
+    description: Addresses associated with the company
+    items:
+      $ref: ./Components/ContactAddress.yaml
+
+  phoneNumbers:
+    type: array
+    description: Phone numbers associated with the company
+    items:
+      type: object
+      properties:
+        number:
+          $ref: ../Shared/Components/PhoneNumber.yaml 
+        type:
+          description: The type of phone number
+          type: string
+          enum:
+            - Primary
+            - Landline
+            - Mobile
+            - Fax
+            - Unknown
+      required:
+        - number
+        - type
+
+  webLinks:
+    description: Web links associated with the company
+    type: array
+    items:
+      properties:
+        type:
+          description: The type of the weblink
+          type: string
+          enum:
+            - Website
+            - Social
+            - Unknown
+        url:
+          description: The full URL for the weblink
+          type: string
+          format: url
+      example:
+        type: Website
+        url: https://codat.io
+            
+
+  registrationNumber:
+    description: The registration number of the company
+    type: string
+    examples:
+      - 10480375
+
+  baseCurrency:
+    $ref: ../Shared/Components/Currency.yaml
+
+  accountBalances:
+    description: The available and current cash balances for the company's accounts
+    type: array
+    items:
+      type: object
+      properties:
+        available:
+          description: The account's current balance
+          type: number
+          format: decimal
+        pending:
+          description: Funds that are not yet available in the balance
+          type: number
+          format: decimal
+        reserved:
+          description: Funds reserved as holdings
+          type: number
+          format: decimal
+        currency:
+          description: The currency of the account
+          allOf:
+            - $ref: ../Shared/Components/Currency.yaml
+
+  sourceUrls:
+    description: URL addresses for the originating system. For example, potential use cases include 'deeplinking' to the originating system
+    type: object
+    additionalProperties:
+      type: string
+    example:
+      url1: 'https://connect.sandbox.com/v2/customers'
+      url2: 'https://connect.sandbox.com/v2/disputes'
+
+allOf:
+  - $ref: ../Shared/Components/CreatedDate.yaml
+  - $ref: ../Shared/Components/ModifiedDates.yaml

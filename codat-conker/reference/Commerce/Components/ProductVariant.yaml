@@ -1,0 +1,87 @@
+title: Product Variant
+description: |
+  Represents a variation of a product available for sale, for example an item of clothing
+  may be available for sale in multiple sizes and colors
+x-stoplight:
+  id: z8pyy073x77y2
+type: object
+allOf:
+  - $ref: ../../Shared/Components/Id.yaml
+  - properties:
+      name:
+        type: string
+        examples:
+          - "Red Coat"
+          - "Black Coat"
+          - "Large Brown Hat"
+      quantity:
+        type: number
+        format: decimal
+        examples:
+          - 0
+          - 10
+          - 100.54
+      isTaxEnabled:
+        type: boolean
+      sku:
+        type: string
+        examples:
+          - Coat-Red-Lrg
+          - Coat-Black-Md
+          - LargeBrownHat
+          - A725BA2
+      barcode:
+        type: string
+        examples:
+          - '564158468416486458646886484'
+          - CSE370
+      unitOfMeasure:
+        type: string
+        examples: 
+          - kg
+          - m
+          - meters
+      vatPercentage:
+        type: number
+        format: decimal
+        examples:
+          - 12.5
+          - 0
+          - 20
+      prices:
+        type: array
+        items:
+          properties:
+            unitPrice:
+              type: number
+              format: decimal
+            currency:
+              $ref: ../../Shared/Components/Currency.yaml
+      inventory:
+        type: array
+        items:
+          properties:
+            totalQuantity:
+              type: number
+              format: decimal
+              example: 1.0
+            locations:
+              type: array
+              items:
+                properties:
+                  quantity:
+                    type: number
+                    format: decimal
+                    example: 1.0
+                  locationRef:
+                    $ref: ../../Shared/Components/NameRef.yaml
+      shippingRequired:
+        type: boolean
+      status:
+        type: string
+        enum:
+          - Unknown
+          - Published
+          - Unpublished
+  - $ref: ../../Shared/Components/CreatedDate.yaml
+  - $ref: ../../Shared/Components/ModifiedDates.yaml

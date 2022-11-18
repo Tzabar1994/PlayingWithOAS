@@ -1,0 +1,52 @@
+title: Address
+x-stoplight:
+  id: kaf0fbpiw3ml3
+type: object
+properties:
+  type:
+    type: string
+    enum:
+      - Billing
+      - Delivery
+      - Unkown
+    example: Delivery
+    description: Type of the address
+  line1:
+    type: string
+    description: First line of the address
+    examples:
+      - 301 Ink Rooms
+      - 156 5th Avenue
+  line2:
+    type: string
+    description: Second line of the address, if applicable
+    examples: 
+      - 28 Easton Street
+      - 4th Floor
+  city:
+    type: string
+    description: Third line of the address; normally the city
+    examples: 
+      - London
+      - New York
+  region:
+    type: string
+    description: Fourth line of the address; normally the region or state
+    examples: 
+      - null
+      - NY
+  country:
+    type: string
+    description: |-
+      Country of the address. 
+
+      ***Note:** This is presented as it comes from the underlying data provider and may not be standardised*
+    examples:
+      - UK
+      - US
+  postalCode:
+    type: string
+    description: Postal or ZIP code for the address
+    examples: 
+      - WC1X 0BE
+      - '10010'

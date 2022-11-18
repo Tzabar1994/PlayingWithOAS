@@ -1,0 +1,8 @@
+type: object
+x-stoplight:
+  id: yptfg1r7vj69j
+properties:
+  createdDate:
+    description: The date the entity was created.
+    type: string
+    format: date-time

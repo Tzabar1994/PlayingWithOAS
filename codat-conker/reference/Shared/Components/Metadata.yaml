@@ -1,0 +1,17 @@
+title: Metadata
+x-stoplight:
+  id: 70eec7b9v3qnk
+type: object
+properties:
+  metadata:
+    type: object
+    description: Additional information about the entity
+    readOnly: true
+    properties:
+      isDeleted:
+        type: boolean
+        description: Indicates whether the record has been deleted in the third-party system this record originiated from
+        examples:
+          - false
+          - true
+        readOnly: true

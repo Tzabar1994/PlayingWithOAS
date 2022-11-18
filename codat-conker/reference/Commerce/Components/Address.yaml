@@ -1,0 +1,38 @@
+title: Address
+x-stoplight:
+  id: lih0rzmqm2onw
+type: object
+properties:
+  type:
+    description: The type of the address
+    type: string
+    enum:
+      - Billing
+      - Delivery
+      - Order
+      - Inventory
+      - Unknown
+
+  line1: 
+    description: The first line of the address
+    type: string
+
+  line2: 
+    description: The second line of the address
+    type: string
+
+  city:
+    description: The third line of the address, or city
+    type: string
+
+  region:
+    description: The fourth line of the address, or region
+    type: string
+
+  country:
+    description: The country for the address
+    type: string
+
+  postalCode:
+    description: The postal (or zip) code for the address
+    type: string

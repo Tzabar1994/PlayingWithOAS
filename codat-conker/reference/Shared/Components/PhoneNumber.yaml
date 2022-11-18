@@ -1,0 +1,9 @@
+title: Phone Number
+x-stoplight:
+  id: 1ch48ghi554eb
+type: string
+description: A phone number
+examples:
+  - +44 25691 154789
+  - (877) 492-8687
+  - 01224 658 999

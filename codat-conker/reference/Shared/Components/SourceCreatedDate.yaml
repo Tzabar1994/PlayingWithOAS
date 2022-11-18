@@ -1,0 +1,8 @@
+type: object
+x-stoplight:
+  id: gdyjg7bg783br
+properties:
+  sourceCreatedDate:
+    description: The date on which this record was created in the originating system
+    type: string
+    format: date-time

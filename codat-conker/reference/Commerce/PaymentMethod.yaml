@@ -1,0 +1,30 @@
+title: PaymentMethod
+x-stoplight:
+  id: ivpv6516qf630
+type: object
+x-datatype:
+  id: 2ed4946e-a548-4ffb-931c-963511372943
+  databaseId: 41
+  name: commerce-paymentMethods
+  domain: commerce
+  singluar: payment method
+  plural: payment methods
+  fetchMode: 'multiple' # indicates that we fetch a single item and don't need a datset wrapper type
+allOf:
+  - $ref: ../Shared/Components/Id.yaml
+  - type: object
+    properties:
+      name:
+        type: string
+        description: The name of the PaymentMethod
+        example: Alipay
+      status:
+        type: string
+        enum:
+          - Active
+          - Archived
+          - Unknown
+        description: Status of the Payment Method
+        example: Active
+    allOf:
+      - $ref: ../Shared/Components/ModifiedDates.yaml

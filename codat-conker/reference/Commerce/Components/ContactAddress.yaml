@@ -1,0 +1,7 @@
+allOf:
+  - $ref: ./Address.yaml
+  - properties:
+      type:
+        enum:
+          - Billing
+          - Delivery

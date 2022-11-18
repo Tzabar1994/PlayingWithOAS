@@ -1,0 +1,14 @@
+title: TransactionSourceRef
+x-stoplight:
+  id: ydj5jokox9hvp
+type: object
+allOf:
+  - $ref: ../../Shared/Components/RecordRef.yaml
+  - properties:
+      type:
+        enum:
+          - Fee
+          - Order
+          - Payment
+          - ServiceCharge
+          - Unknown

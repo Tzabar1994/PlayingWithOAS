@@ -1,0 +1,50 @@
+$id: 'https://schemas.codat.io/datamodel/commerce/product.json'
+title: Commerce-Product
+description: |
+  A Product is an item in the company's inventory, and includes information
+  about the price and quantity of all products, and variants thereof, available for sale
+x-stoplight:
+  id: egcimxah1hg79
+type: object
+x-datatype:
+  dataTypeId: fb247940-3367-4e95-a689-069c10354a3d
+  databaseId: 23
+  name: commerce-products
+  domain: commerce
+  singluar: product
+  plural: products
+  fetchMode: multiple
+allOf:
+  - $ref: ../Shared/Components/Id.yaml
+  - type: object
+    properties:
+      name: 
+        type: string
+        description: Name of the product in the commerce or POS system
+        examples:
+          - Hard Drive
+          - Windows Installation
+          - Software Support (Hourly)
+      description:
+        type: string
+        description: Description of the product recorded in the commerce or point of sale platform.
+        examples: 
+          - 1tb Western Digital Hard Drive
+          - Install of Windows 11 (Professional Edition)
+          - 1 hour of support from an agent (phone or remote)
+      categorization:
+        type: string
+        description: Retail category that the product is assigned to
+        examples:
+          - Hardware
+          - Software
+          - Support Services
+      isGiftCard:
+        type: boolean
+        description: |
+          Whether the product represents a gift card or voucher that
+          can be redeemed in the commerce or POS platform
+      variants:
+        type: array
+        items:
+          $ref: ./Components/ProductVariant.yaml

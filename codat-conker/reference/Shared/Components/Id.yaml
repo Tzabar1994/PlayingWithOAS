@@ -1,0 +1,16 @@
+type: object
+x-stoplight:
+  id: 516bf0ecc4907
+required:
+  - id
+properties:
+  id:
+    type: string
+    description: 'A unique, persistent identifier for this record'
+    examples:
+      - 13d946f0-c5d5-42bc-b092-97ece17923ab
+      - 9wg4lep4ush5cxs79pl8sozmsndbaukll3ind4g7buqbm1h2
+      - 7110701885
+      - EILBDVJVNUAGVKRQ
+    x-codat-validation:
+      - validator: UniqueWithinConnection

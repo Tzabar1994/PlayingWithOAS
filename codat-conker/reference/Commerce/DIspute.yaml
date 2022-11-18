@@ -1,0 +1,62 @@
+title: PaymentMethod
+x-stoplight:
+  id: ivpv6516qf630
+type: object
+x-datatype:
+  id: cf7f81a2-13a7-4f63-8862-604dd7bdfd2a
+  databaseId: 25
+  name: commerce-disputes
+  domain: commerce
+  singluar: dispute
+  plural: disputes
+  fetchMode: multiple
+allOf:
+  - $ref: ../Shared/Components/Id.yaml
+  - type: object
+    properties:
+      disputedTransactions:
+        description: Link to the source event which triggered this transaction.
+        allOf:
+          - $ref: ./Components/TransactionSourceRef.yaml
+      totalAmount:
+        description: Total transaction amount that is under dispute.
+        type: number
+        examples:
+          - 194.12
+          - -283.56
+          - 0
+      currency:
+        description: Currency of the disputed transaction.
+        $ref: ../Shared/Components/Currency.yaml
+      status:
+        description: Current status of the dispute
+        type: string
+        enum:
+          - Won
+          - Lost
+          - Accepted
+          - Processing
+          - ChargeRefunded
+          - EvidenceRequired
+          - InquiryEvidenceRequired
+          - InquiryProcessing
+          - InquiryClosed
+          - WaitingThirdParty
+          - Unknown
+        example: EvidenceRequired
+      reason:
+        description: Reason for the dispute
+        type: string
+        examples:
+          - Unhappy with product
+      dueDate:
+        description: Date when the next action in the dispute resolution is due
+        type: string
+        format: date-time
+        examples:
+          - '2021-03-29T14:39:55'
+    allOf:
+      - $ref: ../Shared/Components/CreatedDate.yaml
+      - $ref: ../Shared/Components/ModifiedDates.yaml
+    required:
+      - currency

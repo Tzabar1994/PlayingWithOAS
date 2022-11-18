@@ -1,0 +1,55 @@
+title: Commerce-Payment
+description: A payment made in a commerce platform
+x-stoplight:
+  id: wcffh3qwn0c3z
+x-datatype:
+  dataTypeId: 92c83841-a935-43af-a134-48bae6dbf72d
+  databaseId: 32
+  name: commerce-payments
+  domain: commerce
+  singluar: payments
+  plural: payment
+  fetchMode: multiple
+allOf:
+  - $ref: ../Shared/Components/Id.yaml
+  - type: object
+    properties:
+      amount:
+        type: number
+        description: Payment Amount (including gratuity)
+        examples:
+          - 194.12
+          - -283.56
+          - 0
+      currency:
+        $ref: ../Shared/Components/Currency.yaml
+        description: Currency in which the payment was made
+      paymentMethodRef:
+        $ref: ../Shared/Components/NameRef.yaml
+        description: The payment method the payment is linked to in the commerce platform.
+        example:
+          id: EILBDVJVNUAGVKRQ
+          name: AliPay
+      status:
+        type: string
+        description: Status of the payment
+        enum:
+          - Pending
+          - Authorized
+          - Paid
+          - Failed
+          - Cancelled
+          - Unknown
+      paymentProvider:
+        type: string
+        description: Service provider of the payment, if applicable.
+        examples:
+          - Amazon Pay
+          - Checkout.com
+          - SagePay
+      dueDate:
+        description: Date by which payment must be made
+        type: string
+        format: date-time
+  - $ref: ../Shared/Components/CreatedDate.yaml
+  - $ref: ../Shared/Components/ModifiedDates.yaml

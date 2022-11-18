@@ -1,0 +1,5 @@
+allOf:
+  - $ref: ./CreatedDates.yaml
+  - $ref: ./ModifiedDates.yaml
+x-stoplight:
+  id: 9e815c1766554

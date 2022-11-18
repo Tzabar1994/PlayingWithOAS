@@ -1,0 +1,48 @@
+title: Commerce-Transaction
+description: A financial transaction recorded in the commerce or point of sale system
+x-stoplight:
+  id: z40cc0atpg1x9
+x-datatype:
+  dataTypeId: 49f67a7d-d196-489d-a7dc-7f834d3f1a68
+  databaseId: 26
+  name: commerce-transactions
+  domain: commerce
+  singluar: transaction
+  plural: transactions
+  fetchMode: multiple
+allOf:
+  - $ref: ../Shared/Components/Id.yaml
+  - type: object
+    properties:
+      totalAmount:
+        description: The total transaction amount
+        type: number
+        examples: 
+          - 194.12
+          - -283.56
+          - 0
+      currency:
+        $ref: ../Shared/Components/Currency.yaml
+      type:
+        description: The type of the platform transaction
+        type: string
+        enum:
+          - Payment
+          - Refund
+          - Payout
+          - FailedPayout
+          - Transfer
+          - PaymentFee
+          - PaymentFeeRefund
+          - Unknown
+      subType:
+        description: Non-standardised transaction type data from the commerce platform
+        type: string
+        examples: 
+          - CardPayment
+          - Invoice payment
+      transactionSourceRef:
+        description: Link to the source event which triggered this transaction
+        allOf:
+          - $ref: ./Components/TransactionSourceRef.yaml
+  - $ref: ../Shared/Components/MetaDates.yaml

@@ -1,0 +1,40 @@
+title: Commerce-Locations
+x-stoplight:
+  id: 2d4g3i124e1ea
+type: object
+x-datatype:
+  dataTypeId: 6fe79975-e07b-45ba-b878-25329dddd94a
+  databaseId: 34
+  name: commerce-locations
+  domain: commerce
+  singluar: location
+  plural: locations
+  fetchMode: multiple
+description: |
+  The Locations datatype holds information on geographic locations at which stocks of products may be held, as referenced in the Products data type.
+
+  Locations also holds information on geographic locations where orders were placed, as referenced in the Orders data type.
+
+  From the Locations endpoints you can retrieve:
+
+  A list of all the Locations of a commerce company: `GET /companies/{companyId}/connections/{connectionId}/data/commerce-locations`.
+  The details of an individual location: `GET /companies/{companyId}/connections/{connectionId}/data/commerce-locations/{locationId}`.
+allOf:
+  - $ref: ../Shared/Components/Id.yaml
+  - type: object
+    properties:
+      name: 
+        description: Name of this location
+        type: string
+      address:
+        description: Address associated with the location
+        allOf:
+          - $ref: Components/Address.yaml
+          - properties:
+              type:
+                  enum:
+                    - Billing
+                    - Delivery
+                    - Inventory
+  - $ref: ../Shared/Components/ModifiedDates.yaml
+

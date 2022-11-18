@@ -1,0 +1,298 @@
+title: Orders
+x-stoplight:
+  id: bg1uwd537qhia
+type: object
+x-datatype:
+  dataTypeId: 6e57c403-248d-4851-96fb-d7c903cd8929
+  databaseId: 22
+  name: commerce-orders
+  domain: commerce
+  singluar: order
+  plural: orders
+  fetchMode: multiple
+description: |
+  Orders contain the transaction details for all products sold by the company, and include details of any payments, service charges, or refunds related to each order.
+
+  From the Orders endpoints you can retrieve:
+
+  A list of all the orders for a commerce company:
+  `GET /companies/{companyId}/connections/{connectionId}/data/commerce-orders`.
+  The details of an individual order:
+  `GET /companies/{companyId}/connections/{connectionId}/data/commerce-orders/{orderId}`.
+  Note that for refunds `quantity` is a negative value and `unitPrice` is a positive value.
+allOf:
+  - $ref: ../Shared/Components/Id.yaml
+  - properties:
+
+      orderNumber:
+        type: string
+        description: Friendly reference for the order in the commerce or point of sale platform.
+
+      country:
+        $ref: ../Shared/Components/CountryCode.yaml
+
+      currency:
+        allOf:
+          - $ref: ../Shared/Components/Currency.yaml
+          - description: Currency in which the order was placed.
+
+      closedDate:
+        description: Date on which order was closed after the product was shipped, paid for, and any refund period had elapsed.
+        type: string
+        format: date-time
+
+      totalAmount:
+        description: Total amount of the order, including tax, net of any discounts and refunds.
+        type: number
+        format: decimal
+
+      totalRefund:
+        description: Total amount refunded issued by a merchant on an order (always a negative value).
+        type: number
+        format: decimal
+
+      totalTaxAmount:
+        description: Total amount of tax applied to the order.
+        type: number
+        format: decimal
+
+      totalDiscount:
+        description: Total amount of discount applied to the order.
+        type: number
+        format: decimal
+
+      totalGratuity:
+        description: Extra amount added to a bill.
+        type: number
+        format: decimal
+
+      orderLineItems: 
+        type: array
+        items:
+          $ref: '#/definitions/lineItem'
+
+      payments: 
+        type: array
+        items: 
+          $ref: '#/definitions/paymentRef'
+
+      serviceCharges: 
+        type: array
+        items: 
+          $ref: '#/definitions/serviceCharge'
+
+      locationRef:
+        allOf:
+          - $ref: ../Shared/Components/NameRef.yaml
+          - description: Reference to the geographic location where the order was placed.
+
+      customerRef:
+        allOf:
+          - $ref: ../Shared/Components/NameRef.yaml
+          - description: Reference to the customer that placed the order.
+
+  - $ref: ../Shared/Components/CreatedDate.yaml
+  - $ref: ../Shared/Components/ModifiedDates.yaml
+      
+definitions:
+  lineItem:
+    allOf:
+      - $ref: ../Shared/Components/Id.yaml
+      - properties:
+
+          quantity:
+            description: |
+              Number of units of the product sold.
+              For refunds, quantity is a negative value.
+            type: number
+            format: decimal
+
+          taxPercentage:
+            description: Percentage rate (from 0 to 100) of any sale tax applied to the unit amount.
+            type: number
+            format: decimal
+            examples: 
+              - 0
+              - 12.5
+              - '45.00'
+
+          totalAmount: 
+            description: Total price of the line item, including discounts, tax and minus any refunds.
+            type: number
+            format: decimal
+
+          totalTaxAmount: 
+            description: Total amount of tax applied to the line item.
+            type: number
+            format: decimal
+
+          unitPrice:
+            description: Price per unit of goods or service.
+            type: number
+            format: decimal
+
+          taxes: 
+            description: Taxes breakdown as applied to order lines.
+            type: array
+            items: 
+              $ref: 'TaxComponent.yaml#/definitions/taxComponentAllocation'
+
+          productRef:
+            allOf:
+              - $ref: ../Shared/Components/NameRef.yaml
+              - description: Reference that links the line item to the correct product details.
+
+          productVariantRef:
+            allOf:
+              - $ref: ../Shared/Components/NameRef.yaml
+              - description: Reference that links the line item to the specific version of product that has been ordered.
+
+          discountAllocations:
+            type: array
+            items:
+              type: object
+              properties:
+
+                name: 
+                  description: Name of the discount in the commerce or point of sale platform.
+                  type: string
+                  example: Promotional Discount
+
+                totalAmount: 
+                  description: Total amount of discount applied.
+                  type: number
+                  format: decimal
+                  example: 15.25
+
+  paymentRef:
+    type: object
+    allOf:
+      - $ref: ../Shared/Components/Id.yaml
+      - type: object
+        properties:
+          
+          amount:
+            type: number
+            nullable: true
+            description: Payment Amount (including gratuity).
+            examples:
+              - 194.12
+              - -283.56
+              - 0
+          
+          currency:
+            $ref: ../Shared/Components/Currency.yaml
+            description: Currency in which the payment was made.
+          
+          type:
+            type: string
+            nullable: true
+            description: Status of the payment
+            enum:
+              - Cash
+              - Card
+              - Invoice
+              - OnlineCard
+              - Swish
+              - Vipps
+              - Mobile
+              - StoreCredit
+              - Paypal
+              - Custom
+              - Prepaid
+              - Unknown
+            example: Cash
+
+          status:
+            type: string
+            nullable: true
+            description: Status of the payment
+            enum:
+              - Pending
+              - Authorized
+              - Paid
+              - Failed
+              - Cancelled
+              - Unknown
+
+          paymentProvider:
+            type: string
+            description: Service provider of the payment, if applicable.
+            examples:
+              - Amazon Pay
+              - Checkout.com
+              - SagePay
+
+          dueDate:
+            description: Date by which payment must be made
+            type: string
+            format: date-time
+
+      - $ref: ../Shared/Components/CreatedDate.yaml
+      - $ref: ../Shared/Components/ModifiedDates.yaml
+
+  serviceCharge:
+    type: object
+    properties:
+
+      description:
+        description: Service charges for this order.
+        type: string
+        example: A service charge
+
+      totalAmount: 
+        description: Total service charge, including taxes.
+        type: number
+        format: decimal
+        examples: 
+          - 0
+          - 12.5
+          - 45.00
+
+      taxPercentage:
+        description: Percentage rate (from 0 to 100) of any tax applied to the service charge.
+        type: number
+        format: decimal
+        examples: 
+          - 0
+          - 12.5
+          - 45.00
+
+      taxAmount: 
+        description: Amount of the service charge that is tax.
+        type: number
+        format: decimal
+        examples: 
+          - 0
+          - 12.5
+          - 45.00
+
+      taxes: 
+        description: Taxes breakdown as applied to service charges.
+        type: array
+        items: 
+          $ref: 'TaxComponent.yaml#/definitions/taxComponentAllocation'
+
+      quantity: 
+        description: The number of times the charge is charged.
+        type: number
+        format: int
+        examples: 
+          - 1
+          - 12
+          - 45
+
+      type:
+        description: The type of the service charge.
+        type: string
+        enum:
+          - Generic
+          - Shipping
+          - Overpayment
+          - Unknown
+        example: Overpayment
+
+
+      
+
+

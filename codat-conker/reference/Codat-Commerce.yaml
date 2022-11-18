@@ -1,0 +1,75 @@
+openapi: 3.1.0
+x-stoplight:
+  id: 32pxuah6hmb9a
+info:
+  title: Codat - Commerce API
+  version: '1.0'
+  summary: 'Codat''s standardised API for accessing commerce data '
+  contact:
+    name: Codat
+    url: 'https://codat.io'
+    email: support@codat.io
+servers:
+  - url: 'https://api.codat.io'
+    description: Codat
+paths:
+  '/companies/{companyId}/connections/{dataConnection}/data/commerce-payments':
+    parameters:
+      - $ref: ./Codat-Common.yaml#/components/parameters/companyId
+      - $ref: ./Codat-Common.yaml#/components/parameters/dataConnectionId
+    get:
+      summary: List commerce payments
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: ./Commerce/Payment.yaml
+                  - $ref: ./Codat-Common.yaml#/components/schemas/_Links
+              examples:
+                example-1:
+                  value:
+                    results:
+                      - id: 13d946f0-c5d5-42bc-b092-97ece17923ab
+                        amount: 194.12
+                        currency: GBP
+                        paymentMethodRef:
+                          id: EILBDVJVNUAGVKRQ
+                          name: AliPay
+                        status: Pending
+                        paymentProvider: Amazon Pay
+                        dueDate: '2019-08-24T14:15:22Z'
+                        createdDate: '2019-08-24T14:15:22Z'
+                        modifiedDate: '2019-08-24T14:15:22Z'
+                        sourceModifiedDate: '2019-08-24T14:15:22Z'
+                    _links:
+                      self:
+                        href: ../dictionary
+                      current:
+                        href: ../dictionary
+                      next:
+                        href: ../dictionary
+                      previous:
+                        href: ../dictionary
+                    pageNumber: 0
+                    pageSize: 0
+                    totalResults: 0
+      operationId: list-commerce-payments
+      description: List all commerce payments for the given company and data connection
+components:
+  schemas: {}
+  securitySchemes:
+    Authorization:
+      name: Your Base 64 encoded API Key
+      type: apiKey
+      in: header
+security:
+  - Authorization: []

@@ -1,0 +1,10 @@
+title: Currency
+x-stoplight:
+  id: 8ljuulqyuc5l4
+type: string
+description: The currency datatype in Codat is an ISO 4217 currency code.
+format: ISO4217
+examples:
+  - GBP
+  - USD
+  - EUR

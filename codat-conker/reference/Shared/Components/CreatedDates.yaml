@@ -1,0 +1,6 @@
+type: object
+x-stoplight:
+  id: c590b4405180f
+allOf:
+  - $ref: ./CreatedDate.yaml
+  - $ref: ./SourceCreatedDate.yaml

@@ -1,0 +1,46 @@
+$id: 'https://schemas.codat.io/datamodel/commerce/customer.json'
+title: Commerce-Customer
+description: Represents a customer who has placed an order in the commerce system"
+x-stoplight:
+  id: avuh8zncanxa4
+type: object
+x-datatype:
+  dataTypeId: f51d742e-6797-4ae0-8b3c-63cc6c9d1972
+  databaseId: 24
+  name: commerce-customers
+  domain: commerce
+  singluar: customer
+  plural: customers
+  fetchMode: multiple
+allOf:
+  - $ref: ../Shared/Components/Id.yaml
+  - type: object
+    properties:
+      customerName:
+        type: string
+        description: Name of the customer
+        example: Fred Smith
+      emailAddress:
+        type: string
+        description: Email address of the customer
+        example: fred.smith@myCompany.com
+      phone:
+        $ref: ../Shared/Components/PhoneNumber.yaml 
+      defaultCurrency:
+        allOf:
+          - description: |
+              Default currency of any transactional data for the customer, 
+              for example, orders or payments
+          - $ref: ../Shared/Components/Currency.yaml
+      addresses:
+        type: array
+        description: Addresses of the customer
+        items:
+          $ref: ./Components/ContactAddress.yaml
+      note:
+        type: string
+        description: Any additional information about the customer
+  - $ref: ../Shared/Components/CreatedDate.yaml
+  - $ref: ../Shared/Components/ModifiedDates.yaml
+      
+    

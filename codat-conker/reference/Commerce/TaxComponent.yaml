@@ -1,0 +1,50 @@
+title: TaxComponent
+x-stoplight:
+  id: uor9593ahnu9j
+type: object
+x-datatype:
+  id: 72715173-20e5-40b5-a825-378ab8195d28
+  databaseId: 42
+  name: commerce-taxComponents
+  domain: commerce
+  singluar: tax component
+  plural: tax components
+  fetchMode: 'multiple' # indicates that we fetch a single item and don't need a datset wrapper type
+allOf:
+  - $ref: ../Shared/Components/Id.yaml
+  - type: object
+    properties:
+      
+      name:
+        type: string
+        description: Name of the Tax Rate Component in the source commerce platform.
+        example: Sales Tax
+
+      rate:
+        description: Rate of taxation represented as a fraction of the net price (typically in the range 0.00 - 1.00).
+        type: boolean
+        examples: 
+          - true
+          - false
+
+    allOf:
+      - $ref: ../Shared/Components/ModifiedDates.yaml
+
+    required:
+      - name
+
+definitions:
+  taxComponentAllocation:
+    properties:
+      
+      taxComponentRef:
+        description: Taxes rates reference object depending on the rates being available on source commerce package.
+        type: object
+        allOf:
+          - $ref: '../Shared/Components/NameRef.yaml'
+
+      rate:
+        description: Tax amount on order line sale as available from source commerce platform.
+        type: number
+        format: decimal
+        nullable: true

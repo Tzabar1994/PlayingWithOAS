@@ -1,0 +1,8 @@
+title: Email Address
+x-stoplight:
+  id: ogdwti0n5d8t4
+type: string
+description: An email address
+examples:
+  - j.smith@example.org
+  - t.jones@example.com
