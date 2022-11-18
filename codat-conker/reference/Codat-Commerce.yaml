@@ -13,12 +13,12 @@ servers:
   - url: 'https://api.codat.io'
     description: Codat
 paths:
-  '/companies/{companyId}/connections/{dataConnection}/data/commerce-payments':
+  '/companies/{companyId}/connections/{dataConnection}/data/commerce-customers':
     parameters:
       - $ref: ./Codat-Common.yaml#/components/parameters/companyId
       - $ref: ./Codat-Common.yaml#/components/parameters/dataConnectionId
     get:
-      summary: List commerce payments
+      summary: List commerce customers
       tags: []
       responses:
         '200':
@@ -32,7 +32,7 @@ paths:
                       results:
                         type: array
                         items:
-                          $ref: ./Commerce/Payment.yaml
+                          $ref: ./Commerce/Customer.yaml
                   - $ref: ./Codat-Common.yaml#/components/schemas/_Links
               examples:
                 example-1:
@@ -62,8 +62,96 @@ paths:
                     pageNumber: 0
                     pageSize: 0
                     totalResults: 0
+      operationId: list-commerce-customers
+      description: List all commerce customers for the given company and data connection
+      parameters:
+        - $ref: ./Codat-Common.yaml#/components/parameters/page
+        - $ref: ./Codat-Common.yaml#/components/parameters/pageSize
+        - $ref: ./Codat-Common.yaml#/components/parameters/query
+        - $ref: ./Codat-Common.yaml#/components/parameters/orderBy
+  '/companies/{companyId}/connections/{dataConnection}/data/commerce-payments':
+    parameters:
+      - $ref: ./Codat-Common.yaml#/components/parameters/companyId
+      - $ref: ./Codat-Common.yaml#/components/parameters/dataConnectionId
+    get:
+      summary: List commerce payments
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: ./Commerce/Payment.yaml
+                  - $ref: ./Codat-Common.yaml#/components/schemas/_Links
       operationId: list-commerce-payments
-      description: List all commerce payments for the given company and data connection
+      description: List commerce payments for the given company & data connection.
+      parameters:
+        - $ref: ./Codat-Common.yaml#/components/parameters/page
+        - $ref: ./Codat-Common.yaml#/components/parameters/pageSize
+        - $ref: ./Codat-Common.yaml#/components/parameters/query
+        - $ref: ./Codat-Common.yaml#/components/parameters/orderBy
+  '/companies/{companyId}/connections/{dataConnection}/data/commerce-products':
+    parameters:
+      - $ref: ./Codat-Common.yaml#/components/parameters/companyId
+      - $ref: ./Codat-Common.yaml#/components/parameters/dataConnectionId
+    get:
+      summary: List commerce products
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: ./Commerce/Product.yaml
+                  - $ref: ./Codat-Common.yaml#/components/schemas/_Links
+      operationId: get-companies-companyId-connections-dataConnection-data-commerce-products
+      parameters:
+        - $ref: ./Codat-Common.yaml#/components/parameters/page
+        - $ref: ./Codat-Common.yaml#/components/parameters/pageSize
+        - $ref: ./Codat-Common.yaml#/components/parameters/query
+        - $ref: ./Codat-Common.yaml#/components/parameters/orderBy
+  '/companies/{companyId}/connections/{dataConnection}/data/commerce-productCategories':
+    parameters:
+      - $ref: ./Codat-Common.yaml#/components/parameters/companyId
+      - $ref: ./Codat-Common.yaml#/components/parameters/dataConnectionId
+    get:
+      summary: List commerce transactions
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: ./Commerce/Transaction.yaml
+                  - $ref: ./Codat-Common.yaml#/components/schemas/_Links
+      operationId: list-commerce-transactions
+      description: ''
+      parameters:
+        - $ref: ./Codat-Common.yaml#/components/parameters/page
+        - $ref: ./Codat-Common.yaml#/components/parameters/pageSize
+        - $ref: ./Codat-Common.yaml#/components/parameters/query
+        - $ref: ./Codat-Common.yaml#/components/parameters/orderBy
 components:
   schemas: {}
   securitySchemes:
