@@ -2,7 +2,7 @@ openapi: 3.1.0
 x-stoplight:
   id: 466k6ayziv9at
 info:
-  title: Codat
+  title: Codat Common
   version: '1.0'
   summary: Codat Common
   license:
