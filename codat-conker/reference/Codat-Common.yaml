@@ -20,15 +20,19 @@ servers:
     description: Codat
 tags:
   - name: Companies
-    description: Endpoints to manage your Codat companies
+    description: Endpoints to manage your Codat companies.
   - name: Data Connections
-    description: Endpoints to manage your companies' data connections
+    description: Endpoints to manage your companies' data connections.
   - name: Migrations
     description: Endpoints that allow you to migrate existing connections into Codat.
   - name: Webhooks
     description: 'Endpoints to manage webhooks, rules and alerts.'
   - name: Company Status
     description: Understand the state of data within Codat.
+  - name: Integrations
+    description: View and manage your available integrations in Codat.
+  - name: Refresh Data
+    description: Queue pull operations to refresh data in Codat.
 paths:
   /companies:
     get:
@@ -448,7 +452,7 @@ paths:
           $ref: '#/components/responses/Not-Found'
       description: Initiate the pull of all data types that are enabled for this company
       tags:
-        - Companies
+        - Refresh Data
   '/companies/{companyId}/data/queue/{dataType}':
     parameters:
       - $ref: '#/components/parameters/companyId'
@@ -467,8 +471,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/Not-Found'
-      tags:
-        - Companies
       description: Queue a single pull operation for the given company and data type
       parameters:
         - schema:
@@ -477,6 +479,8 @@ paths:
           in: query
           name: connectionId
           description: 'Optionally, provide a data connection id to only queue pull operations on that connection.'
+      tags:
+        - Refresh Data
   /rules:
     get:
       summary: List webhooks
@@ -705,6 +709,55 @@ paths:
           $ref: '#/components/responses/Not-Found'
       operationId: get-pull-operation
       description: Retrieve information about a single dataset or pull operation.
+  /integrations:
+    get:
+      summary: List integrations
+      tags:
+        - Integrations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Integration'
+                  - $ref: '#/components/schemas/_Links'
+        '400':
+          $ref: '#/components/responses/Malformed-Query'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      operationId: list-integrations
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/orderBy'
+      description: List your available integrations
+  '/integrations/{platformKey}':
+    parameters:
+      - $ref: '#/components/parameters/platformKey'
+    get:
+      summary: Your GET endpoint
+      tags:
+        - Integrations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Integration'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/Not-Found'
+      operationId: get-integrations-platformKey
 components:
   schemas:
     Company:
@@ -960,6 +1013,7 @@ components:
             - Success
             - Failure
             - TimeOut
+            - Initial
           example: Pending
         requested:
           type: string
@@ -1470,5 +1524,16 @@ components:
         format: uuid
         example: eaed9f0f-e77b-4bc9-a58f-ab8b4b99ab18
       description: ID of a dataset or pull operation
+    platformKey:
+      name: platformKey
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 4
+        maxLength: 4
+        pattern: '[a-z]{4}'
+        example: gbol
+      description: 4 letter key for an integration
 security:
   - API_Key: []
