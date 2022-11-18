@@ -13,7 +13,7 @@ servers:
   - url: 'https://api.codat.io'
     description: Codat
 paths:
-  '/companies/{companyId}/connections/{dataConnection}/data/commerce-customers':
+  '/companies/{companyId}/connections/{dataConnectionId}/data/commerce-customers':
     parameters:
       - $ref: ./Codat-Common.yaml#/components/parameters/companyId
       - $ref: ./Codat-Common.yaml#/components/parameters/dataConnectionId
@@ -69,7 +69,7 @@ paths:
         - $ref: ./Codat-Common.yaml#/components/parameters/pageSize
         - $ref: ./Codat-Common.yaml#/components/parameters/query
         - $ref: ./Codat-Common.yaml#/components/parameters/orderBy
-  '/companies/{companyId}/connections/{dataConnection}/data/commerce-payments':
+  '/companies/{companyId}/connections/{dataConnectionId}/data/commerce-payments':
     parameters:
       - $ref: ./Codat-Common.yaml#/components/parameters/companyId
       - $ref: ./Codat-Common.yaml#/components/parameters/dataConnectionId
@@ -97,7 +97,7 @@ paths:
         - $ref: ./Codat-Common.yaml#/components/parameters/pageSize
         - $ref: ./Codat-Common.yaml#/components/parameters/query
         - $ref: ./Codat-Common.yaml#/components/parameters/orderBy
-  '/companies/{companyId}/connections/{dataConnection}/data/commerce-products':
+  '/companies/{companyId}/connections/{dataConnectionId}/data/commerce-products':
     parameters:
       - $ref: ./Codat-Common.yaml#/components/parameters/companyId
       - $ref: ./Codat-Common.yaml#/components/parameters/dataConnectionId
@@ -124,7 +124,7 @@ paths:
         - $ref: ./Codat-Common.yaml#/components/parameters/pageSize
         - $ref: ./Codat-Common.yaml#/components/parameters/query
         - $ref: ./Codat-Common.yaml#/components/parameters/orderBy
-  '/companies/{companyId}/connections/{dataConnection}/data/commerce-productCategories':
+  '/companies/{companyId}/connections/{dataConnectionId}/data/commerce-transactions':
     parameters:
       - $ref: ./Codat-Common.yaml#/components/parameters/companyId
       - $ref: ./Codat-Common.yaml#/components/parameters/dataConnectionId
