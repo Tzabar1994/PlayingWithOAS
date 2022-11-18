@@ -246,7 +246,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/companyId'
     get:
-      summary: List data connections
+      summary: List connections
       tags:
         - Data Connections
       responses:
@@ -327,8 +327,8 @@ paths:
           $ref: '#/components/responses/Malformed-Query'
         '401':
           $ref: '#/components/responses/Unauthorized'
-      operationId: list-data-connections
-      description: List the data connections for a company
+      operationId: list-company-connections
+      description: List the connections for a company
       parameters:
         - $ref: '#/components/parameters/pageSize'
         - $ref: '#/components/parameters/page'
@@ -348,7 +348,7 @@ paths:
       - $ref: '#/components/parameters/companyId'
       - $ref: '#/components/parameters/connectionId'
     get:
-      summary: Get data connection
+      summary: Get connection
       tags:
         - Data Connections
       responses:
@@ -375,8 +375,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/Not-Found'
-      operationId: get-data-connection
-      description: Get a single data connection for a company
+      operationId: get-company-connection
+      description: Get a single connection for a company
       requestBody:
         content:
           application/json:
@@ -386,8 +386,8 @@ paths:
               Example:
                 value: true
     delete:
-      summary: Delete data connection
-      operationId: delete-dataConnection
+      summary: Delete connection
+      operationId: delete-company-connection
       responses:
         '200':
           description: OK
@@ -396,13 +396,13 @@ paths:
         '404':
           $ref: '#/components/responses/Not-Found'
       description: |-
-        Revoke and remove a data connection from a company.
+        Revoke and remove a connection from a company.
         This operation is not reversible - the end user would need to reauthorize a new data connection if you wish to view new data for this company.
       tags:
         - Data Connections
     patch:
-      summary: Unlink data connection
-      operationId: patch-companies-companyId-connections-dataConnectionId
+      summary: Unlink connection
+      operationId: patch-company-connection
       responses:
         '200':
           description: OK
@@ -418,7 +418,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/Not-Found'
-      description: 'This allows you to deauthorize a data connection, without deleting it from Codat. This means you can still view any data that has previously been pulled into Codat, and also lets you re-authorize in future if your customer wishes to resume sharing their data.'
+      description: 'This allows you to deauthorize a connection, without deleting it from Codat. This means you can still view any data that has previously been pulled into Codat, and also lets you re-authorize in future if your customer wishes to resume sharing their data.'
       tags:
         - Data Connections
       requestBody:
