@@ -63,7 +63,7 @@ paths:
                     pageSize: 0
                     totalResults: 0
       operationId: list-commerce-payments
-      description: List all commerce payments for the given company and data connection
+      description: List all commerce payments for the given company and data connection.
 components:
   schemas: {}
   securitySchemes:
