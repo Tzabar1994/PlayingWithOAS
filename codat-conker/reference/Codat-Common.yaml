@@ -843,25 +843,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
       operationId: get-profile-syncSettings
       description: 'Retrieve the sync settings for your client. This includes how often data types should be queued to be updated, and how much history should be fetched.'
-    patch:
-      summary: Update sync settings
-      operationId: patch-profile-syncSettings
-      responses:
-        '204':
-          description: No Content
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-      tags:
-        - Settings
-      description: 'Use this to update the sync settings for a **single** data type at a time. '
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SyncSetting'
-        description: |-
-          Because we are patching the whole sync settings, every field should be provided within each data type you update.
-          You can also use `POST` to update all sync settings in one go.
     post:
       summary: Update all sync settings
       operationId: post-profile-syncSettings
