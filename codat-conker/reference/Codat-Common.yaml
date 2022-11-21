@@ -33,6 +33,8 @@ tags:
     description: View and manage your available integrations in Codat.
   - name: Refresh Data
     description: Queue pull operations to refresh data in Codat.
+  - name: Settings
+    description: Endpoints to manage your Codat instance.
 paths:
   /companies:
     get:
@@ -761,7 +763,141 @@ paths:
         '404':
           $ref: '#/components/responses/Not-Found'
       operationId: get-integrations-platformKey
-      description: ''
+      description: 'Get single integration, by platformKey'
+  /profile:
+    get:
+      summary: Get profile
+      tags:
+        - Settings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      operationId: get-settings-profile
+      description: Fetch your Codat profile.
+    put:
+      summary: Update profile
+      operationId: put-profile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      tags:
+        - Settings
+      description: Update your Codat profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+        description: All fields should be included when updating your profile.
+  /profile/syncSettings:
+    get:
+      summary: Get sync settings
+      tags:
+        - Settings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      clientId:
+                        type: string
+                        format: uuid
+                        example: 367f7975-267b-439b-90c6-a6040ee680f3
+                      settings:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/SyncSetting'
+                      overridesDefaults:
+                        type: boolean
+                type: object
+              examples:
+                Example:
+                  value:
+                    clientId: 367f7975-267b-439b-90c6-a6040ee680f3
+                    settings:
+                      - dataType: invoices
+                        fetchOnFirstLink: true
+                        syncSchedule: 24
+                        syncOrder: 0
+                        syncFromUtc: '2020-01-01T12:00:00.000Z'
+                        syncFromWindow: 24
+                        monthsToSync: 24
+                        isLocked: true
+                    overridesDefaults: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      operationId: get-profile-syncSettings
+      description: 'Retrieve the sync settings for your client. This includes how often data types should be queued to be updated, and how much history should be fetched.'
+    patch:
+      summary: Update sync settings
+      operationId: patch-profile-syncSettings
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      tags:
+        - Settings
+      description: 'Use this to update the sync settings for a **single** data type at a time. '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncSetting'
+        description: |-
+          Because we are patching the whole sync settings, every field should be provided within each data type you update.
+          You can also use `POST` to update all sync settings in one go.
+    post:
+      summary: Update all sync settings
+      operationId: post-profile-syncSettings
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      description: Update sync settings for all data types.
+      tags:
+        - Settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - properties:
+                    clientId:
+                      type: string
+                      format: uuid
+                      example: 367f7975-267b-439b-90c6-a6040ee680f3
+                    settings:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/SyncSetting'
+                    overridesDefaults:
+                      type: boolean
+                      default: true
+                  required:
+                    - clientId
+                    - settings
+                    - overridesDefaults
+              type: object
+        description: |-
+          Include a `syncSetting` object for each data type.
+          `syncFromWindow`, `syncFromUTC` & `monthsToSync` only need to be included if you wish to set a value for them.
 components:
   schemas:
     Company:
@@ -1317,6 +1453,95 @@ components:
         - enabled
       title: Integration
       description: An integration that Codat supports
+    Profile:
+      type: object
+      x-examples:
+        example-1:
+          name: string
+          logoUrl: string
+          iconUrl: string
+          redirectUrl: string
+          whiteListUrls:
+            - string
+          apiKey: string
+          alertAuthHeader: string
+          confirmCompanyName: true
+      title: Profile
+      description: ''
+      properties:
+        name:
+          type: string
+          example: Bob's Burgers
+        logoUrl:
+          type: string
+        iconUrl:
+          type: string
+        redirectUrl:
+          type: string
+        whiteListUrls:
+          type: array
+          items:
+            type: string
+            format: uri
+            example: 'https://bobs-burgers.com/redirect'
+        apiKey:
+          type: string
+          deprecated: true
+        alertAuthHeader:
+          type: string
+        confirmCompanyName:
+          type: boolean
+          deprecated: true
+      required:
+        - name
+        - redirectUrl
+    SyncSetting:
+      type: object
+      x-examples:
+        example-1:
+          dataType: string
+          fetchOnFirstLink: true
+          syncSchedule: 0
+          syncOrder: 0
+          syncFromUtc: '2022-11-21T13:43:29.821Z'
+          syncFromWindow: 0
+          monthsToSync: 0
+          isLocked: true
+      properties:
+        dataType:
+          type: string
+          example: invoices
+        fetchOnFirstLink:
+          type: boolean
+          description: Whether this data type should be queued after a company has authorized a connection.
+        syncSchedule:
+          type: integer
+          example: 24
+          description: Number of hours after which this data type should be refreshed.
+        syncOrder:
+          type: integer
+        syncFromUtc:
+          type: string
+          format: date-time
+          example: '2020-01-01T12:00:00.000Z'
+          description: Date from which data should be fetched. Set this *or* `syncFromWindow`
+        syncFromWindow:
+          type: integer
+          example: 24
+          description: Number of months of data to be fetched. Set this *or* `syncFromUTC`
+        monthsToSync:
+          type: integer
+          example: 24
+          description: 'Months of data to fetch, for report data types (`balanceSheet` & `profitAndLoss`) only.'
+        isLocked:
+          type: boolean
+      required:
+        - dataType
+        - fetchOnFirstLink
+        - syncSchedule
+        - syncOrder
+      title: Sync Setting
+      description: 'Describes how often, and how much history, should be fetched for the given data type when a pull operation is queued.'
   securitySchemes:
     API_Key:
       name: Authorization
