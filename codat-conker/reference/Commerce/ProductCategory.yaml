@@ -1,0 +1,32 @@
+type: object
+x-examples:
+  example-1:
+    id: '100'
+    name: Entertainment
+    ancestorRefs: []
+    hasChildren: true
+    modifiedDate: '2022-01-01T12:00:00Z'
+    sourceModifiedDate: '2021-10-01T12:53:21Z'
+properties:
+  id:
+    type: string
+    example: '"102"'
+  name:
+    type: string
+    example: Entertainment
+  ancestorRefs:
+    type: array
+    items:
+      $ref: ../Shared/Components/RecordRef.yaml
+  hasChildren:
+    type: boolean
+  modifiedDate:
+    type: string
+    format: date-time
+    example: '2022-01-01T12:00:00.000Z'
+  sourceModifiedDate:
+    type: string
+    format: date-time
+    example: '2022-01-01T12:00:00.000Z'
+title: Product Category
+description: 'Product categories are used to classify a group of products together, either by type (eg "Furniture"), or sometimes by tax profile.'
