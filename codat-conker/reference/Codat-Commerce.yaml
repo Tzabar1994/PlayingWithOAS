@@ -23,7 +23,7 @@ paths:
       - $ref: ./Codat-Common.yaml#/components/parameters/companyId
       - $ref: ./Codat-Common.yaml#/components/parameters/connectionId
     get:
-      summary: List commerce customers
+      summary: List customers
       tags:
         - Commerce Data
       responses:
@@ -273,7 +273,7 @@ paths:
       - $ref: ./Codat-Common.yaml#/components/parameters/companyId
       - $ref: ./Codat-Common.yaml#/components/parameters/connectionId
     get:
-      summary: List commerce payments
+      summary: List payments
       tags:
         - Commerce Data
       responses:
@@ -331,7 +331,7 @@ paths:
       - $ref: ./Codat-Common.yaml#/components/parameters/companyId
       - $ref: ./Codat-Common.yaml#/components/parameters/connectionId
     get:
-      summary: List commerce products
+      summary: List products
       tags:
         - Commerce Data
       responses:
@@ -348,18 +348,19 @@ paths:
                         items:
                           $ref: ./Commerce/Product.yaml
                   - $ref: ./Codat-Common.yaml#/components/schemas/_Links
-      operationId: get-companies-companyId-connections-connection-data-commerce-products
+      operationId: list-commerce-products
       parameters:
         - $ref: ./Codat-Common.yaml#/components/parameters/page
         - $ref: ./Codat-Common.yaml#/components/parameters/pageSize
         - $ref: ./Codat-Common.yaml#/components/parameters/query
         - $ref: ./Codat-Common.yaml#/components/parameters/orderBy
+      description: 'The Products data type provides the company''s product inventory, and includes the price and quantity of all products, and product variants, available for sale.'
   '/companies/{companyId}/connections/{connectionId}/data/commerce-transactions':
     parameters:
       - $ref: ./Codat-Common.yaml#/components/parameters/companyId
       - $ref: ./Codat-Common.yaml#/components/parameters/connectionId
     get:
-      summary: List commerce transactions
+      summary: List transactions
       tags:
         - Commerce Data
       responses:
@@ -377,7 +378,7 @@ paths:
                           $ref: ./Commerce/Transaction.yaml
                   - $ref: ./Codat-Common.yaml#/components/schemas/_Links
       operationId: list-commerce-transactions
-      description: ''
+      description: 'Details of all financial transactions recorded in the commerce or point of sale system are added to the Transactions data type. For example, payments, service charges, and fees.'
       parameters:
         - $ref: ./Codat-Common.yaml#/components/parameters/page
         - $ref: ./Codat-Common.yaml#/components/parameters/pageSize
@@ -405,12 +406,13 @@ paths:
                         items:
                           $ref: ./Commerce/ProductCategory.yaml
                   - $ref: ./Codat-Common.yaml#/components/schemas/_Links
-      operationId: get-companies-companyId-connections-connectionId-data-commerce-productCategories
+      operationId: list-commerce-productCategories
       parameters:
         - $ref: ./Codat-Common.yaml#/components/parameters/page
         - $ref: ./Codat-Common.yaml#/components/parameters/pageSize
         - $ref: ./Codat-Common.yaml#/components/parameters/query
         - $ref: ./Codat-Common.yaml#/components/parameters/orderBy
+      description: 'Product categories are used to classify a group of products together, either by type (eg "Furniture"), or sometimes by tax profile.'
 components:
   schemas: {}
   securitySchemes:
